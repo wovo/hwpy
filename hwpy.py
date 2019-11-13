@@ -221,14 +221,14 @@ class invert:
       Write the inverse of v to the minion.
       The minion must support write()."""
       
-      self.minion.write( ! v )
+      self.minion.write( ~ v )
  
    def read( self ):
       """
       Return the invrese of the value read from the minion.
       The minion must support read()."""
       
-      return ! self.minionm.read()
+      return ~ self.minion.read()
       
    def make_input():
       """
