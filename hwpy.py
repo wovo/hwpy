@@ -17,7 +17,7 @@ def init():
    This function is called automatically when needed.""" 
    
    GPIO.setmode( GPIO.BCM )
-   PIO.setwarnings( False )
+   GPIO.setwarnings( False )
    
    
 # ===========================================================================
