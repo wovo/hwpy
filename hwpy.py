@@ -11,9 +11,10 @@
 import RPi.GPIO as GPIO
 from time import sleep
 
-def _init():  
+def init():  
    """
-   Internal function that initializes RPi.GPIO""" 
+   Internal function that initializes RPi.GPIO.
+   This function is called automatically when needed.""" 
    
    GPIO.setmode( GPIO.BCM )
    PIO.setwarnings( False )
