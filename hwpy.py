@@ -290,8 +290,14 @@ class keypad:
       pass
    
    def pressed( self ):
-      pass
+      pass      
+      
+   def read_nonblocking( self ):
+      pass   
    
+   def read( self ):
+      pass
+      
       
 # ===========================================================================
 #
@@ -305,7 +311,7 @@ def blink( pin, t = 0.5 ):
    t is the period. 
    The pin must be output."""
    
-   while true:
+   while True:
       pin.write( 0 )
       time.sleep( 1.0 * t / 2 )
       pin.write( 1 )
@@ -317,7 +323,7 @@ def kitt( port, t = 0.5 ):
    t is the sweep time. 
    The pins must be outputs."""
    
-   while true:
+   while True:
       for p in range( 0, port.n ):
          port.write( 1 << p )
          time.sleep( 1.0 * t / port.n )
