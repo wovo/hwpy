@@ -8,15 +8,14 @@
 #
 # ===========================================================================
 
-import RPi
-import time
+import RPi, RPi.GPIO, time
 
 def init():  
    """
    Internal function that initializes RPi.GPIO.
    This function is called automatically when needed.""" 
    
-   RPi.GPIO.setmode( RPi.GPIO.BCM )
+   RPi.GPIO.setmode( RPi.GPIO.BOARD )
    RPi.GPIO.setwarnings( False )
    
    
