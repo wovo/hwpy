@@ -228,6 +228,8 @@ class invert:
       Write the inverse of v to the minion.
       The minion must support write()."""
       
+      print( v, ~v )
+      
       self.minion.write( ~ v )
  
    def read( self ):
