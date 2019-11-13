@@ -77,7 +77,7 @@ class gpio:
       Write v (0 or 1) to the gpio. 
       It must be an output."""
       
-      RPi.GPIO.output( self.pin, v )   
+      RPi.GPIO.output( self.pin, v & 0x01 )   
       
    def read( self, v ):
       """
@@ -227,8 +227,6 @@ class invert:
       """
       Write the inverse of v to the minion.
       The minion must support write()."""
-      
-      print( v, ~v )
       
       self.minion.write( ~ v )
  
