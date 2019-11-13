@@ -8,16 +8,16 @@
 #
 # ===========================================================================
 
-import RPi.GPIO as GPIO
-from time import sleep
+import RPi
+import time
 
 def init():  
    """
    Internal function that initializes RPi.GPIO.
    This function is called automatically when needed.""" 
    
-   GPIO.setmode( GPIO.BCM )
-   GPIO.setwarnings( False )
+   RPi.GPIO.setmode( GPIO.BCM )
+   RPi.GPIO.setwarnings( False )
    
    
 # ===========================================================================
@@ -54,33 +54,33 @@ class gpio:
       
       init()
       self.pin = pin      
-      GPIO.setup( self.pin, GPIO.OUT )
+      RPi.GPIO.setup( self.pin, GPIO.OUT )
       
    def make_input( self ):
       """
       Make the gpio an input"""
       
-      RPIO.setup( pin, GPIO.IN, pull_up_down = GPIO.PUD_UP )   
+      RPi.RPIO.setup( pin, GPIO.IN, pull_up_down = GPIO.PUD_UP )   
       
    def make_output( self ):
       """
       Make the gpio an output"""
       
-      GPIO.setup( self.pin, GPIO.OUT ) 
+      RPi.GPIO.setup( self.pin, GPIO.OUT ) 
       
    def write( self, v ):
       """
       Write v (0 or 1) to the gpio. 
       It must be an output."""
       
-      GPIO.output( self.pin, v )   
+      RPi.GPIO.output( self.pin, v )   
       
    def read( self, v ):
       """
       Read the value (0 or 1) of the gpio. 
       It must be an input."""
       
-      return GPIO.output( self.pin, v )  
+      return RPi.GPIO.output( self.pin, v )  
       
 class gpi:
    """
