@@ -1,10 +1,13 @@
 # ===========================================================================
 #
-# hwpy: an OO hardware interface library for the RaPi
+# hwpy: an OO hardware interface library for the Raspberry Pi
 #
 # home: https://www.github.com/wovo/hwpy
 #
+# author: Wouter van Ooijen (wouter.vanooijen@hu.nl)
+#
 # uses http://domoticx.com/python-library-rpi-gpio/
+# (which is pre-installed on the common RaPi Linux distributions)
 #
 # ===========================================================================
 
@@ -19,6 +22,22 @@ def init():
    RPi.GPIO.setwarnings( False )
    
    
+# ===========================================================================
+#
+# delays
+#
+# ===========================================================================
+      
+def wait_s( n ):
+   time.sleep( n )
+
+def wait_ms( n ):
+   wait_s( n / 1000.0 )
+
+def wait_us( n ):
+   wait_ms( n / 1000.0 )
+
+
 # ===========================================================================
 #
 # xy class
@@ -215,7 +234,8 @@ class port:
 
 class invert:
    """
-   Decorator that inverts the value that is reasd or written."""
+   Decorator that inverts the value that is read or written
+   to or from a pin or port."""
 
    def __init__( self, minion ):
       """
@@ -232,7 +252,7 @@ class invert:
  
    def read( self ):
       """
-      Return the invrese of the value read from the minion.
+      Return the inverse of the value read from the minion.
       The minion must support read()."""
       
       return ~ self.minion.read()
@@ -247,7 +267,7 @@ class invert:
    def make_output():
       """
       Make the minion output.
-      The minion must suppoiert make_output()."""
+      The minion must support make_output()."""
       
       self.minion.make_output()   
      
@@ -278,7 +298,7 @@ class all:
       
 # ===========================================================================
 #
-# matix keypad
+# matrix keypad
 #
 # ===========================================================================
 
@@ -289,20 +309,55 @@ class keypad:
    def __init__( self, rows, columns, characters ):
       """
       Create a matrix keypad from the rows and columns ports,
-      and the list of characters to be returned.
-      The rows must be inpuits, the columns must be outputs."""
+      and the list of characters to be returned for pressed keys.
+      The characters list is by row.
+      The length of the list must be the number of rows multiplied
+      by the number of columns.
+      The rows must be inputs or open-collector, 
+      the columns must be outputs or open-collector."""
+      
+      self.rows = rows
+      self.columns = columns
+      self.characters = characters
+      
+      # in case the rows are open collector, they must be high
+      try:
+         self.rows.write( ~ 0 )
+      except:
+         pass      
+      
+      if ( self.rows.n * self.columns.n ) != len( characters ):
+         raise( "keypad error %n rows %n columns %n characters" %
+            ( self.rows.n, self.columns.m, len( self.characters )))
    
    def is_pressed( self, key ):
-      pass
-   
-   def pressed( self ):
-      pass      
+      """
+      Return true if and only if the specified key is pressed."""
       
-   def read_nonblocking( self ):
-      pass   
+      i = self.characters.find( key )
+      self.columns.write( ~ ( 1 << ( i / self.rows.n )))
+      return ( self.rows.read() & ( 1 << i % self.rows.n )) == 0
+      
+   def read_nonblocking( self, default ):
+      """
+      Scan the keys until one is found that is pressed.
+      When found, return the pressed key.
+      When none is found, return the default."""
+      
+      for c in self.characters:
+         if self.is_pressed( c ):
+            return c
+      return default            
    
    def read( self ):
-      pass
+      """
+      Scan the keyboard until a key is found pressed.
+      Return that key."""
+   
+      while True:
+         key = self.read_nonblocking( None )
+         if key != None:
+            return Key
       
       
 # ===========================================================================
@@ -315,7 +370,7 @@ def blink( pin, t = 0.5 ):
    """
    Blink a LED on the pin.
    t is the period. 
-   The pin must be output."""
+   The pin must be an output."""
    
    while True:
       pin.write( 0 )
@@ -325,7 +380,7 @@ def blink( pin, t = 0.5 ):
       
 def kitt( port, t = 0.5 ):
    """
-   Kitt display on the pins in port. 
+   Kitt display on the pins in the port. 
    t is the sweep time. 
    The pins must be outputs."""
    
@@ -340,13 +395,13 @@ def kitt( port, t = 0.5 ):
         
 # ===========================================================================
 #
-# i2c
+# bit-banged i2c
 #
 # ===========================================================================
       
 class i2c_from_scl_sda:
    """
-   A bit-banged (slow, but pin-agnostic) i2c interface"""
+   A bit-banged (slow, but pin-agnostic) i2c interface."""
 
    def __init__( self, scl, sda ):
       """
@@ -456,7 +511,7 @@ class i2c_from_scl_sda:
          
 # ===========================================================================
 #
-# pcf857a(a)
+# pcf8574(a)
 #
 # ===========================================================================
 
@@ -507,17 +562,188 @@ def pcf8574a( i2c, address = 0 ):
          
 # ===========================================================================
 #
+# hd44780
+#
+# ===========================================================================
+
+class hd44780:
+   """
+   4-bit interface to an HD44780 (character) LCD.
+   
+   Some characters are treated special:
+     - '\\n' puts the cursor at the first position of the next line
+     - '\\r' puts the cursor at the start of the current line
+     - '\\f' puts the cursor at the top-left position and clears the lcd
+     - '\\txxyy' puts the cursor at the position (xx,yy)
+   """
+
+   def __init__( self, pin_rs, pin_e, port_data, size ):
+      """
+      Construct an interface to an LCD controlled by an hd44780 chip
+      from the RS and E pins, the 4-bit port to the D4..D8 pins, 
+      and the size (number of characters per line, and number of lines),
+      and initializes the controller."""
+      
+      self.rs = pin_rs
+      self.e = pin_e
+      self.data = port_data
+      self.size = size
+      
+      pin_e.write( 0 )
+      pin_rs.write( 0 )
+      wait_ms( 100  )
+
+      # interface initialization: make sure the LCD is in 4 bit mode
+      # (magical sequence, taken from the HD44780 data-sheet)
+      self.write4( 0x03 )
+      wait_ms( 15 )
+      self.write4( 0x03 )
+      wait_us( 100 )
+      self.write4( 0x03 )
+      self.write4( 0x02 )     # 4 bit mode
+
+      # functional initialization
+      self.command( 0x28 )             # 4 bit mode, 2 lines, 5x8 font
+      self.command( 0x0C )             # display on, no cursor, no blink
+      self.clear()                     # clear display, 'cursor' home  
+      self.goto_state = 0
+      
+   def write4( self, nibble ):
+      wait_us( 10 )
+      self.data.write( nibble )
+      wait_us( 20 )
+      self.e.write( 1 )
+      wait_us( 20 )
+      self.e.write( 0 )
+      wait_us( 100 )
+
+   def write8( self, is_data, byte ):
+      self.rs.write( is_data )
+      self.write4( byte >> 4 )
+      self.write4( byte )
+   
+   def command( self, cmd ):
+      """
+      Write a command byte to the LCD
+
+      Use this function only for features that are not 
+      provided by the console interface, like the definition
+      of the user-defined characters."""
+      
+      self.write8( 0, cmd )
+
+   def data( self, chr ):
+      """
+      Write a data byte to the LCD
+    
+      Use this function only for features that are not 
+      provided by the console interface, like the definition
+      of the user-defined characters."""
+      
+      self.write8( 1, chr )
+
+   def clear( self ):
+      """  
+      Clear the display and put the cursor at (0,0)."""
+      
+      self.command( 0x01 )
+      wait_ms( 5 )
+      self.cursor_set( xy( 0, 0 ) )
+      
+   def cursor( self, position ):
+      self.postion = position
+      
+      if( self.size.y == 1 ):
+         if( self.position.x < 8 ):
+            self.command( 0x80 + self.position.x )
+         else:
+            self.command( 0x80 + 0x40 + ( self.position.x - 8 ))
+      else:
+         if( self.size.y == 2 ):
+            self.command( 
+               0x80
+               + ( 0x40 if ( self.position.y > 0 ) else 0x00 )
+               + ( self.position.x ))
+         else:
+            self.command( 
+                0x80
+                + ( 0x40 if ( self.position.y & 0x01 ) else 0x00 )
+                + ( 0x14 if ( self.position.y & 0x02 ) else 0x00 ))
+
+   def write_char( self, char ):
+
+      if self.goto_state == 0:
+         pass
+         
+      elif self.goto_state == 1:
+
+         self.position.x = 10 * ( char - '0' )
+         self.goto_state += 1;
+         return
+
+      elif self.goto_state == 2:
+         self.position.x += ( char - '0' )
+         self.goto_state += 1;
+         return
+
+      elif self.goto_state == 3:
+         self.position.y = 10 * ( char - '0' )
+         self.goto_state += 1;
+         return
+
+      elif self.goto_state == 4:
+         self.position.y += ( c - '0' )
+         self.goto_state = 0;
+         self.cursor( self.position );
+         return
+
+      if( char == '\n' ):
+         self.cursor( xy( 0, self.position.y + 1 ) )
+
+      elif( char == '\r' ):
+         self.cursor( xy( 0, self.position.y ) );
+
+      elif( c == '\v' ):
+         self.cursor( xy( 0, 0 ) )
+
+      elif( c == '\f' ):
+         self.clear()
+
+      elif( c == '\t' ):
+         self.goto_state = 1
+
+      elif(
+         ( self.position.x >= 0 )
+         and ( self.position.x < size.x )
+         and ( self.position.y >= 0 )
+         and ( self.position.y < size.y )
+      ):
+      
+         # handle the gap for 1-line displays
+         if( ( size.x == 1 ) and ( self.position.x == 8 ) ):
+            self.cursor( self.position )
+      
+         self.data( char )      
+         self.position.x += 1
+      
+   def write( self, text ):
+      for c in text:
+         self.write_char( c )
+      
+      
+# ===========================================================================
+#
 # todo
 #
 # ===========================================================================
       
-# hd44780
-# I2C
+# pcf demos
+# pcf keypad      
+# serial backpack HD44780
 # SPI
 # MPU6050?
 # card reader
-# PCF8574(A)
-# HC595
-# matrix keypad
+# HC595?
+# servo
          
       
