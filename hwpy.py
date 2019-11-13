@@ -190,20 +190,20 @@ class port:
       The pins must support write()."""      
       
       mask = 1
-      for pin in pins:
+      for pin in self.pins:
          pin.write( v & mask )
          mask = mask << 1
          
    def make_input( self ):
       """
       Make all pins inpits. The pins must be gpio."""
-      for pin in pins:
+      for pin in self.pins:
          pin.make_input()
 
    def make_output( self ):
       """
       Make all pins outputs. The pins must be gpio."""
-      for pin in pins:
+      for pin in self.pins:
          pin.make_output()
          
          
