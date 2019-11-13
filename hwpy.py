@@ -15,7 +15,7 @@ def init():
    Internal function that initializes RPi.GPIO.
    This function is called automatically when needed.""" 
    
-   RPi.GPIO.setmode( RPi.GPIO.BOARD )
+   RPi.GPIO.setmode( RPi.GPIO.BCM )
    RPi.GPIO.setwarnings( False )
    
    
