@@ -395,7 +395,7 @@ class i2c:
          if rad_one_bit():
             result = result | mask
          mask = mask >> 1
-      rerurn result         
+      return result         
  
    def write_one_byte( self, byte ):
       mask = 0x80
