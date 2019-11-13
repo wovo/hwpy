@@ -272,7 +272,7 @@ class all:
       """
       Write v to all minions."""
       
-      for m in minions:
+      for m in self.minions:
          m.write( v ) 
       
       
