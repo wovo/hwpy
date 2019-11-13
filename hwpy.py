@@ -156,12 +156,14 @@ class gpoc:
       
 class port:
    """
-   A port is a set of pins."""
+   A port is a set of pins.
+   port.n is the number of pins.
+   port.pins are the pins."""
    
    def __init__( self, pins ):
       "Create a port from a list of pins."
       self.pins = pins
-      n = len( self.pins )
+      self.n = len( self.pins )
 
    def read( self ):
       """
