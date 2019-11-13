@@ -286,8 +286,10 @@ class keypad:
       The rows must be inpuits, the columns must be outputs."""
    
    def is_pressed( self, key ):
+      pass
    
    def pressed( self ):
+      pass
    
       
 # ===========================================================================
