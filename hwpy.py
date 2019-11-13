@@ -16,7 +16,7 @@ def init():
    Internal function that initializes RPi.GPIO.
    This function is called automatically when needed.""" 
    
-   RPi.GPIO.setmode( GPIO.BCM )
+   RPi.GPIO.setmode( RPi.GPIO.BCM )
    RPi.GPIO.setwarnings( False )
    
    
@@ -54,19 +54,24 @@ class gpio:
       
       init()
       self.pin = pin      
-      RPi.GPIO.setup( self.pin, GPIO.OUT )
+      RPi.GPIO.setup( self.pin, RPi.GPIO.OUT )
       
    def make_input( self ):
       """
       Make the gpio an input"""
       
-      RPi.RPIO.setup( pin, GPIO.IN, pull_up_down = GPIO.PUD_UP )   
+      RPi.RPIO.setup( 
+         pin, 
+         RPi.GPIO.IN, 
+         pull_up_down = RPi.GPIO.PUD_UP )   
       
    def make_output( self ):
       """
       Make the gpio an output"""
       
-      RPi.GPIO.setup( self.pin, GPIO.OUT ) 
+      RPi.GPIO.setup( 
+         self.pin, 
+         RPi.GPIO.OUT ) 
       
    def write( self, v ):
       """
