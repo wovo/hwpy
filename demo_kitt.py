@@ -5,13 +5,13 @@ A kitt display on LEDs connected to the pins 17,
 import hwpy
 
 leds = hwpy.port([ 
-   hwlib.gpo( 17 ),
-   hwlib.gpo( 27 ),
-   hwlib.gpo( 22 ),
-   hwlib.gpo( 10 ),
-   hwlib.gpo(  9 ),
-   hwlib.gpo( 11 ),
-   hwlib.gpo(  0 ),
-   hwlib.gpo(  5 ),
+   hwpy.gpo( 17 ),
+   hwpy.gpo( 27 ),
+   hwpy.gpo( 22 ),
+   hwpy.gpo( 10 ),
+   hwpy.gpo(  9 ),
+   hwpy.gpo( 11 ),
+   hwpy.gpo(  0 ),
+   hwpy.gpo(  5 ),
 ])   
 hwpy.kitt( leds )
