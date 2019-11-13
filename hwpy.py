@@ -91,13 +91,13 @@ class gpi:
       Create a gpi pin from its pin number"""
       
       self.pin = gpio( pin )
-      self.make_input()
+      self.pin.make_input()
       
    def read( self ):
       """
       Read the value (0 or 1) of the gpio. """
       
-      return self.read()
+      return self.pin.read()
       
 class gpo:
    """
@@ -108,13 +108,13 @@ class gpo:
       Create a gpo pin from its pin number"""
       
       self.pin = gpio( pin )
-      self.make_output()
+      self.pin.make_output()
       
    def write( self, v ):
       """
       Write v (0 or 1) to the gpio."""
 
-      self.write( v ) 
+      self.pin.write( v ) 
       
 class gpoc:
    """
@@ -125,23 +125,23 @@ class gpoc:
       Create a gpoc pin from its pin number."""   
    
       self.pin = gpio( pin )
-      self.make_input()
+      self.pin.make_input()
       
    def write( self, v ):
       """
       Write v (0 or 1) to the gpio."""
 
       if v:
-         self.make_input()      
+         self.pin.make_input()      
       else:   
-         self.make_output()
-         self.write( 0 )    
+         self.pin.make_output()
+         self.pin.write( 0 )    
 
    def read( self ):
       """
       Read the value (0 or 1) of the gpio."""
 
-      return self.read()
+      return self.pin.read()
 
 
 # ===========================================================================
