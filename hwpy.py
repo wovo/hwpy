@@ -385,7 +385,7 @@ class i2c:
       self.sda.write( 1 )
       self.wait()
       
-   def self.read_ack( self ):
+   def read_ack( self ):
       return not self.read_one_bit()   
 
    def read_one_byte( self ):
