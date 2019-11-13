@@ -49,7 +49,7 @@ class gpio:
 
    def __init__( self, pin ):
       """
-      Create a gpio pin from its pin number"""
+      Create a gpio pin from its pin (BCM) number"""
       
       init()
       self.pin = pin      
@@ -57,7 +57,7 @@ class gpio:
       
    def make_input( self ):
       """
-      Make the gpio an input"""
+      Make the gpio an input, with pull-up"""
       
       RPi.RPIO.setup( 
          pin, 
@@ -88,11 +88,11 @@ class gpio:
       
 class gpi:
    """
-   A gpi (input only)  pin"""
+   A gpi (input only)  pin (with pull-up)"""
    
    def __init__( self, pin ):  
       """
-      Create a gpi pin from its pin number"""
+      Create a gpi pin from its (BCM) pin number"""
       
       self.pin = gpio( pin )
       self.pin.make_input()
@@ -109,7 +109,7 @@ class gpo:
    
    def __init__( self, pin ):  
       """
-      Create a gpo pin from its pin number"""
+      Create a gpo pin from its (BCM) pin number"""
       
       self.pin = gpio( pin )
       self.pin.make_output()
@@ -126,7 +126,7 @@ class gpoc:
 
    def __init__( self, pin ):  
       """
-      Create a gpoc pin from its pin number."""   
+      Create a gpoc pin from its (BCM) pin number."""   
    
       self.pin = gpio( pin )
       self.pin.make_input()
@@ -150,7 +150,7 @@ class gpoc:
 
 # ===========================================================================
 #
-# gpio, gpi, gpo
+# port
 #
 # ===========================================================================
       
@@ -344,14 +344,24 @@ def kitt( port, t = 0.5 ):
 #
 # ===========================================================================
       
-class i2c:
+class i2c_from_scl_sda:
+   """
+   A bit-banged (slow, but pin-agnostic) i2c interface"""
+
    def __init__( self, scl, sda ):
+      """
+      Create an i2c from the scl and sda pins"""
+      
       self.scl = scl
       self.sda = sda
       self.scl.write( 1 )
       self.sda.write( 1 )
       
    def wait( self ):
+      """
+      Internal function: wait half a bit-cell.
+      Currently does nothing."""
+      
       pass   
 
    def write_one_bit( self, v ):
@@ -444,8 +454,63 @@ class i2c:
       return result         
          
          
+# ===========================================================================
+#
+# pcf857a(a)
+#
+# ===========================================================================
+
+class buffered_pin:
+   def __init__( self, master, mask ):
+      self.master = master
+      self.mask = mask
+      
+   def write( self, v ):
+      if v:
+         self.master.write_buffer |= mask
+      else:
+         self.master.write_buffer &= ~ mask
+      self.master.flush()
+
+   def read( self ):
+      self.master.refresh();
+      return ( self.master.read_buffer & mask ) != 0      
+      
+class pcf8574x:
+   def __init__( self, i2c ):
+      self.i2c = i2c
+      self.address = address
+      self.pins = []
+      for i in range( 0, 8 ):
+         self.pins.append( bufefered_pin( self, 1 << i ))
+      
+   def flush( self ):
+      i2c.write( self.address, self.write_buffer )   
+   
+   def refresh( self ):   
+      self.read_buffer = i2c.read( self.address )    
+      
+   def write( self, value ):
+      self.write_buffer = value
+      self.flush()
+      
+   def read( self ):
+      self.refresh()
+      return self.read_buffer
+   
+def pcf8574( i2c, address = 0 ):
+   return pcf8574( i2c, 0x20 + address ) 
+         
+def pcf8574a( i2c, address = 0 ):
+   return pcf8574( i2c, 0x28 + address ) 
          
          
+# ===========================================================================
+#
+# todo
+#
+# ===========================================================================
+      
 # hd44780
 # I2C
 # SPI

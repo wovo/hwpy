@@ -1,5 +1,5 @@
 """
-A kitt display on LEDs connected to the pins 17,
+A kitt display on 8 LEDs connected to indicated pins.
 """
 
 import hwpy
