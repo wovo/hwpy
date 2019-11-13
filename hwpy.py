@@ -391,7 +391,7 @@ class i2c:
    def read_one_byte( self ):
       result = 0
       mask = 0x80
-      for in in range( 0, 8 ):
+      for in range( 0, 8 ):
          if rad_one_bit():
             result = result | mask
          mask = mask >> 1
