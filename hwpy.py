@@ -78,7 +78,7 @@ class gpio:
       """
       Make the gpio an input, with pull-up"""
       
-      RPi.RPIO.setup( 
+      RPi.GPIO.setup( 
          pin, 
          RPi.GPIO.IN, 
          pull_up_down = RPi.GPIO.PUD_UP )   
