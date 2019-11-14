@@ -423,8 +423,8 @@ class i2c_from_scl_sda:
    def _write_one_bit( self, v ):
       self.scl.write( 0 )
       self.wait()
-      sda.write( v )
-      scl.write( 1 )
+      self.sda.write( v )
+      self.scl.write( 1 )
       
       while not self.scl.read():
          self.wait()      
@@ -439,7 +439,7 @@ class i2c_from_scl_sda:
          self.wait()
          
       b = self.sda.read()
-      wait()
+      self.wait()
       return b      
    
    def _write_ack( self ):
