@@ -544,7 +544,7 @@ class _buffered_pin:
       return ( self.master.read_buffer & mask ) != 0      
       
 class _pcf8574x:
-   def __init__( self, i2c ):
+   def __init__( self, i2c, address ):
       self.i2c = i2c
       self.address = address
       self.pins = []
