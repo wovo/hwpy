@@ -534,9 +534,9 @@ class _buffered_pin:
       
    def write( self, v ):
       if v:
-         self.master.write_buffer |= mask
+         self.master.write_buffer |= self.mask
       else:
-         self.master.write_buffer &= ~ mask
+         self.master.write_buffer &= ~ self.mask
       self.master.flush()
 
    def read( self ):
