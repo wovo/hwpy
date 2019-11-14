@@ -489,7 +489,7 @@ class i2c_from_scl_sda:
       the (7-bit) address."""
       
       self._write_start()
-      self._write( ( address << 1 ) + 0x01 )   
+      self._write_one_byte( ( address << 1 ) + 0x01 )   
       self._read_ack()
       
       self._write_start()
