@@ -194,10 +194,10 @@ class port:
       
       result = 0
       mask = 1
-      for pin in pins:
-         mask = mask << 1
+      for pin in self.pins:
          if pin.read():
             result = result + mask
+         mask = mask << 1
       return result      
       
    def write( self, v ):
@@ -242,6 +242,10 @@ class invert:
       Create an invert from its minion."""
       
       self.minion = minion
+      try:
+         self.n = minion.n
+      except:
+         pass
       
    def write( self, v ):
       """
@@ -319,6 +323,7 @@ class keypad:
       self.rows = rows
       self.columns = columns
       self.characters = characters
+      self.last = None
       
       # in case the rows are open collector, they must be high
       try:
@@ -335,10 +340,14 @@ class keypad:
       Return true if and only if the specified key is pressed."""
       
       i = self.characters.find( key )
+      #print( "" )
+      #print( i )
       self.columns.write( ~ ( 1 << ( i / self.rows.n )))
+      #print( ~ ( 1 << ( i / self.rows.n )))
+      #print( self.rows.read() )
       return ( self.rows.read() & ( 1 << i % self.rows.n )) == 0
       
-   def read_nonblocking( self, default ):
+   def read_pressed_nonblocking( self, default ):
       """
       Scan the keys until one is found that is pressed.
       When found, return the pressed key.
@@ -349,16 +358,31 @@ class keypad:
             return c
       return default            
    
-   def read( self ):
+   def read_pressed_blocking( self ):
       """
       Scan the keyboard until a key is found pressed.
       Return that key."""
    
       while True:
-         key = self.read_nonblocking( None )
+         key = self.read_pressed_nonblocking( None )
          if key != None:
-            return Key
-      
+            return key
+
+   def read( self, t = 0.050 ):
+      """
+      Scan the keyboard until a key is found newly pressed.
+      Return that key.
+      Wait t seconds between keypad scans 
+      to prevent lock-up of the system."""
+   
+      while True:
+         key = self.read_pressed_nonblocking( None )
+         if ( key != None ) and ( key != self.last ):
+            self.last = key
+            return key
+         self.last = key
+         time.sleep( t )
+
       
 # ===========================================================================
 #
@@ -489,13 +513,14 @@ class i2c_from_scl_sda:
       the (7-bit) address."""
       
       self._write_start()
-      self._write_one_byte( ( address << 1 ) + 0x01 )   
+      self._write_one_byte( ( address << 1 ) + 0x00 )   
       self._read_ack()
       
-      self._write_start()
-      self._write_one_byte( address << 1 )
       for b in bytes:
          self._write_one_byte( b )
+         self._read_ack()
+
+      self._write_stop()
    
    def read( self, address, n ):
       """
@@ -504,13 +529,13 @@ class i2c_from_scl_sda:
       the (7-bit) address."""
 
       self._write_start()
-      self._write_one_byte( address << 1 )   
+      self._write_one_byte( ( address << 1 ) + 0x01 )  
       self._read_ack()
       
       result = []
       first = 1
       for i in range( 0, n ):
-         if first:
+         if not first:
             self._write_ack()
          first = 0            
          result.append( self._read_one_byte() )
@@ -541,7 +566,7 @@ class _buffered_pin:
 
    def read( self ):
       self.master.refresh();
-      return ( self.master.read_buffer & mask ) != 0      
+      return ( self.master.read_buffer & self.mask ) != 0      
       
 class _pcf8574x:
    def __init__( self, i2c, address ):
@@ -550,14 +575,15 @@ class _pcf8574x:
       self.pins = []
       self.read_buffer = 0
       self.write_buffer = 0
+      self.n = 8
       for i in range( 0, 8 ):
          self.pins.append( _buffered_pin( self, 1 << i ))
       
    def flush( self ):
-      self.i2c.write( self.address, self.write_buffer )   
+      self.i2c.write( self.address, [ self.write_buffer ] )   
    
    def refresh( self ):   
-      self.read_buffer = self.i2c.read( self.address )    
+      self.read_buffer = self.i2c.read( self.address, 1 )[ 0 ]    
       
    def write( self, value ):
       self.write_buffer = value
@@ -751,8 +777,7 @@ class hd44780:
 #
 # ===========================================================================
       
-# pcf demos
-# pcf keypad      
+# hd44780 direct demo    
 # serial backpack HD44780
 # SPI
 # MPU6050?
