@@ -548,6 +548,8 @@ class _pcf8574x:
       self.i2c = i2c
       self.address = address
       self.pins = []
+      self.read_buffer = 0
+      self.write_buffer = 0
       for i in range( 0, 8 ):
          self.pins.append( _buffered_pin( self, 1 << i ))
       
