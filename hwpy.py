@@ -405,7 +405,7 @@ class i2c_from_scl_sda:
 
    def __init__( self, scl, sda ):
       """
-      Create an i2c from the scl and sda pins"""
+      Create a bit-banged i2c from the scl and sda pins"""
       
       self.scl = scl
       self.sda = sda
@@ -414,12 +414,13 @@ class i2c_from_scl_sda:
       
    def wait( self ):
       """
-      Internal function: wait half a bit-cell.
-      Currently does nothing."""
+      Internal function that waits half a bit-cell.
+      Currently this does nothing, 
+      because bit-banged i2c is already slow."""
       
       pass   
 
-   def write_one_bit( self, v ):
+   def _write_one_bit( self, v ):
       self.scl.write( 0 )
       self.wait()
       sda.write( v )
@@ -428,7 +429,7 @@ class i2c_from_scl_sda:
       while not self.scl.read():
          self.wait()      
    
-   def read_one_bit( self ):
+   def _read_one_bit( self ):
       self.scl.write( 0 )
       self.sda.write( 1 )
       self.wait()
@@ -441,19 +442,19 @@ class i2c_from_scl_sda:
       wait()
       return b      
    
-   def write_ack( self ):
-      self.write_one_bit( 0 )
+   def _write_ack( self ):
+      self._write_one_bit( 0 )
    
-   def write_nack( self ):
-      self.write_one_bit( 1 )
+   def _write_nack( self ):
+      self._write_one_bit( 1 )
       
-   def write_start( self ):
+   def _write_start( self ):
       self.sda.write( 0 )
       self.wait()
       self.scl.write( 0 )      
       self.wait()
       
-   def write_stop( self ):
+   def _write_stop( self ):
       self.scl.write( 0 )
       self.wait()
       self.sda.write( 0 )
@@ -463,49 +464,59 @@ class i2c_from_scl_sda:
       self.sda.write( 1 )
       self.wait()
       
-   def read_ack( self ):
-      return not self.read_one_bit()   
+   def _read_ack( self ):
+      return not self._read_one_bit()   
 
-   def read_one_byte( self ):
+   def _read_one_byte( self ):
       result = 0
       mask = 0x80
       for i in range( 0, 8 ):
-         if rad_one_bit():
+         if self._read_one_bit():
             result = result | mask
          mask = mask >> 1
       return result         
  
-   def write_one_byte( self, byte ):
+   def _write_one_byte( self, byte ):
       mask = 0x80
       for i in range( 0, 8 ):
-         self.write_one_byte( byte & mask )
+         self._write_one_byte( byte & mask )
          mask = mask >> 1
    
    def write( self, address, bytes ):
-      self.write_start()
-      self.write( ( address << 1 ) + 0x01 )   
-      self.read_ack()
+      """
+      Perform an i2c write transaction:
+      write the bytes to the chip with
+      the (7-bit) address."""
       
-      self.write_start()
-      self.write( address << 1 )
+      self._write_start()
+      self._write( ( address << 1 ) + 0x01 )   
+      self._read_ack()
+      
+      self._write_start()
+      self._write_one_byte( address << 1 )
       for b in bytes:
-         self.writeOne_byte( b )
+         self._write_one_byte( b )
    
    def read( self, address, n ):
-      self.write_start()
-      self.write( address << 1 )   
-      self.read_ack()
+      """
+      Perform an i2c read transaction:
+      read and return n bytes from the chip with
+      the (7-bit) address."""
+
+      self._write_start()
+      self._write_one_byte( address << 1 )   
+      self._read_ack()
       
       result = []
       first = 1
       for i in range( 0, n ):
          if first:
-            self.write_ack()
+            self._write_ack()
          first = 0            
-         result.append( self.read_one_byte() )
+         result.append( self._read_one_byte() )
          
-      self.write_nack()
-      self.write_stop()      
+      self._write_nack()
+      self._write_stop()      
       return result         
          
          
@@ -515,7 +526,8 @@ class i2c_from_scl_sda:
 #
 # ===========================================================================
 
-class buffered_pin:
+class _buffered_pin:
+
    def __init__( self, master, mask ):
       self.master = master
       self.mask = mask
@@ -537,7 +549,7 @@ class pcf8574x:
       self.address = address
       self.pins = []
       for i in range( 0, 8 ):
-         self.pins.append( bufefered_pin( self, 1 << i ))
+         self.pins.append( _buffered_pin( self, 1 << i ))
       
    def flush( self ):
       i2c.write( self.address, self.write_buffer )   
@@ -595,12 +607,12 @@ class hd44780:
 
       # interface initialization: make sure the LCD is in 4 bit mode
       # (magical sequence, taken from the HD44780 data-sheet)
-      self.write4( 0x03 )
+      self._write4( 0x03 )
       wait_ms( 15 )
-      self.write4( 0x03 )
+      self._write4( 0x03 )
       wait_us( 100 )
-      self.write4( 0x03 )
-      self.write4( 0x02 )     # 4 bit mode
+      self._write4( 0x03 )
+      self._write4( 0x02 )     # 4 bit mode
 
       # functional initialization
       self.command( 0x28 )             # 4 bit mode, 2 lines, 5x8 font
@@ -608,7 +620,7 @@ class hd44780:
       self.clear()                     # clear display, 'cursor' home  
       self.goto_state = 0
       
-   def write4( self, nibble ):
+   def _write4( self, nibble ):
       wait_us( 10 )
       self.data.write( nibble )
       wait_us( 20 )
@@ -617,7 +629,7 @@ class hd44780:
       self.e.write( 0 )
       wait_us( 100 )
 
-   def write8( self, is_data, byte ):
+   def _write8( self, is_data, byte ):
       self.rs.write( is_data )
       self.write4( byte >> 4 )
       self.write4( byte )
@@ -630,7 +642,7 @@ class hd44780:
       provided by the console interface, like the definition
       of the user-defined characters."""
       
-      self.write8( 0, cmd )
+      self._write8( 0, cmd )
 
    def data( self, chr ):
       """
@@ -640,7 +652,7 @@ class hd44780:
       provided by the console interface, like the definition
       of the user-defined characters."""
       
-      self.write8( 1, chr )
+      self._write8( 1, chr )
 
    def clear( self ):
       """  
