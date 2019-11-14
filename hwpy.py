@@ -554,10 +554,10 @@ class _pcf8574x:
          self.pins.append( _buffered_pin( self, 1 << i ))
       
    def flush( self ):
-      i2c.write( self.address, self.write_buffer )   
+      self.i2c.write( self.address, self.write_buffer )   
    
    def refresh( self ):   
-      self.read_buffer = i2c.read( self.address )    
+      self.read_buffer = self.i2c.read( self.address )    
       
    def write( self, value ):
       self.write_buffer = value
