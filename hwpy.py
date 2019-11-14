@@ -479,7 +479,7 @@ class i2c_from_scl_sda:
    def _write_one_byte( self, byte ):
       mask = 0x80
       for i in range( 0, 8 ):
-         self._write_one_byte( byte & mask )
+         self._write_one_bit( byte & mask )
          mask = mask >> 1
    
    def write( self, address, bytes ):
