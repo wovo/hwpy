@@ -98,12 +98,12 @@ class gpio:
       
       RPi.GPIO.output( self.pin, v & 0x01 )   
       
-   def read( self, v ):
+   def read( self ):
       """
       Read the value (0 or 1) of the gpio. 
       It must be an input."""
       
-      return RPi.GPIO.output( self.pin, v )  
+      return RPi.GPIO.input( self.pin )  
       
 class gpi:
    """
