@@ -58,6 +58,25 @@ class xy:
       
 # ===========================================================================
 #
+# xyz class
+#
+# ===========================================================================
+      
+class xy:
+   """
+   A container for an (x,y,z) value pair"""
+   
+   def __init( self, x, y, z ):
+      """
+      Create an xy object from x, y and z values"""
+      
+      self.x = copy( x )
+      self.y = copy( y )      
+      self.z = copy( z )      
+      
+      
+# ===========================================================================
+#
 # gpio, gpi, gpo, gpoc
 #
 # ===========================================================================
@@ -481,9 +500,9 @@ class i2c_hardware:
    """
    This is the hardware i2c interface.
    It is much faster than the bit banged (software) version, 
-   but it must be enabled, and it can only use the  
-   hardware i2c pins.
-   https://raspberry-projects.com/pi/pi-operating-systems/raspbian/io-pins-raspbian/i2c-pins
+   but it must be enabled
+   (sudo raspi-config; select 5 Interfacing Options; enable i2c), 
+   and it can only use the hardware i2c pins. 
    """
 
    def __init__( self, interface = 1 ):
@@ -632,6 +651,40 @@ class i2c_from_scl_sda:
          
 # ===========================================================================
 #
+# i2c_registers
+#
+# ===========================================================================
+
+class i2c_registers:
+   """
+   This class implements access to registers of an i2c peripheral,
+   addressed in the customary i2c style: a first byte written is 
+   the register address for subsequent written bytes (in the same
+   transaction) or read bytes (in the next transaction).
+   Word values are assumed to be high-first"""
+
+   def __init__( self, i2c, address ):
+      self.i2c = i2c
+      self.address = address
+      
+   def write_byte( self, register, value ):
+      self.i2c.write( self.address, [ register, value ] )
+   
+   def write_word( self, register, value ):
+      self.i2c.write( self.address, [ register, value >> 8, value & 0xFF ] )
+   
+   def read_byte( self, register ):
+      self.i2c.write( self.address, [ register ] )
+      return self.i2c.read( self.address, 1 )[ 0 ]
+   
+   def read_word( self, register ):
+      self.i2c.write( self.address, [ register ] )
+      result = self.i2c.read( self.address, 2 )
+      return ( result[ 0 ] << 8 n ) + result[ 1 ]
+   
+
+# ===========================================================================
+#
 # pcf8574(a)
 #
 # ===========================================================================
@@ -663,6 +716,8 @@ class _pcf8574x:
       self.n = 8
       for i in range( 0, 8 ):
          self.pins.append( _buffered_pin( self, 1 << i ))
+      self.p0, self.p1, self.p2, self.p3, self.p4, self.p5, self.p6, self.p7 =
+         self.pins[ 0 ]         
       
    def flush( self ):
       self.i2c.write( self.address, [ self.write_buffer ] )   
@@ -685,6 +740,62 @@ def pcf8574a( i2c, address = 0 ):
    return _pcf8574x( i2c, 0x28 + address ) 
          
          
+# ===========================================================================
+#
+# mpu6050
+#
+# ===========================================================================
+
+class mpu6050:
+   """
+   This is a simple interface to the mpu6050 accelerometer."""
+   
+    # registers 
+    PWR_MGMT_1  = 0x6B 
+    PWR_MGMT_2  = 0x6C 
+    ACCEL_XOUT0 = 0x3B 
+    ACCEL_YOUT0 = 0x3D 
+    ACCEL_ZOUT0 = 0x3F 
+    TEMP_OUT0   = 0x41 
+    GYRO_XOUT0  = 0x43 
+    GYRO_YOUT0  = 0x45 
+    GYRO_ZOUT0  = 0x47 
+
+    ACCEL_CONFIG = 0x1C 
+    GYRO_CONFIG = 0x1B 
+
+   def __init__( self, i2c, address = 0x68 ):
+      self.registers = i2c_registers( i2c, address )
+      self.registers.write_byte( self.PWR_MGMT_1, 0x00 )
+      
+   def temperature( self ):
+      """
+      Read and return the temperature, in degrees Celcius"""
+      
+      raw_temp = self.registers.read_word( self.TEMP_OUT0 ) 
+      actual_temp = ( raw_temp / 340.0 ) + 36.53 
+      return actual_temp 
+   
+      
+   def gyroscopes( self ):
+      """
+      Read and return the gyroscope readings"""
+      
+      return xyz(
+         self.registers.read_word( GYRO_XOUT0 ),
+         self.registers.read_word( GYRO_YOUT0 ),
+         self.registers.read_word( GYRO_ZOUT0 ) )
+   
+   def acceleration( self ):
+      """
+      Read and return the acceleraction readuings"""
+      
+      return xyz(
+         self.registers.read_word( ACCEL_XOUT0 ),
+         self.registers.read_word( ACCEL_YOUT0 ),
+         self.registers.read_word( ACCEL_ZOUT0 ) )
+       
+
 # ===========================================================================
 #
 # hd44780
