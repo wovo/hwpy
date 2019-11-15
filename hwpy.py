@@ -799,6 +799,48 @@ class mpu6050:
 
 # ===========================================================================
 #
+# servo
+#
+# ===========================================================================
+
+class servo:
+   """
+   Interface to a (hobby) servo.
+   Python threading is used to create the actual servo pulses.
+   One thread is created per servo.
+   The common hobby servo's must be powered with 5V.
+   One small (9G) servo can probably be powered directly from the Pi's 5V,
+   for more or larger servo's you should use a separate 5V power."""
+
+   def __init__( self, pin, min = 1000, max = 2000 ):
+      """
+      Create a servo interface from the output pin to the servo.
+      The min and max values are the pulse duration for the minimum
+      (write(0)) and maximum (write(1)) settings."""
+      
+      self.pin = pin
+      self.min = min
+      self.max = max
+      self.value = 0
+      thread.start_new_thread( self._thread, ( self ) )
+      
+   def write( self, value ):
+      """
+      Write a new setting to the servo.
+      The setting must be in the range 0.0 .. 1.0."""
+      
+      self.value = value
+      
+   def _thread( self ):
+      while True:
+         wait_ms(50 )
+         self.pin.write( 1 )
+         self.wait_us( self.min + self.value * ( self.max - self.min ) )
+         self.pin.write( 0 )      
+         
+
+# ===========================================================================
+#
 # hd44780
 #
 # ===========================================================================
@@ -974,13 +1016,15 @@ class hd44780:
 #
 # ===========================================================================
       
+# pcf8591 a/d      
 # hd44780 direct demo    
 # serial backpack HD44780
 # SPI
-# MPU6050?
+# MPU6050
 # card reader
 # HC595?
 # servo
 # https://bitbucket.org/MattHawkinsUK/rpispy-misc/src/master/
+# 8x8 LED matrix
          
       
