@@ -13,5 +13,6 @@ Features:
    - set of pins: port
    - pin/port decorators: invert, all
    - serial interfaces: i2c, spi
-   - chip interfaces: hc595, pcf8574(a)
+   - chip interfaces: hc595, pcf8574(a), pcf8591, mpu6050
    - lcd: hd44780
+   - servo, matrix keypad

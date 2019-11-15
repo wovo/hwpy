@@ -11,7 +11,7 @@
 #
 # ===========================================================================
 
-import RPi, RPi.GPIO, time
+import RPi, RPi.GPIO, time, thread
 
 def init():  
    """
@@ -816,13 +816,15 @@ class servo:
       """
       Create a servo interface from the output pin to the servo.
       The min and max values are the pulse duration for the minimum
-      (write(0)) and maximum (write(1)) settings."""
+      (write(0)) and maximum (write(1)) settings.
+      The 1000 and 2000 microseconds are the pulse lengths 
+      for the 'extreme' angles of a typical servo."""
       
       self.pin = pin
       self.min = min
       self.max = max
       self.value = 0
-      thread.start_new_thread( self._thread, ( self ) )
+      thread.start_new_thread( lambda: self._thread(), () )
       
    def write( self, value ):
       """
@@ -835,7 +837,7 @@ class servo:
       while True:
          wait_ms(50 )
          self.pin.write( 1 )
-         self.wait_us( self.min + self.value * ( self.max - self.min ) )
+         wait_us( self.min + self.value * ( self.max - self.min ) )
          self.pin.write( 0 )      
          
 
@@ -1023,7 +1025,6 @@ class hd44780:
 # MPU6050
 # card reader
 # HC595?
-# servo
 # https://bitbucket.org/MattHawkinsUK/rpispy-misc/src/master/
 # 8x8 LED matrix
          
