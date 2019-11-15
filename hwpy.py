@@ -466,9 +466,9 @@ class sr04:
       # wait for end of the pulse
       while self.echo.read() != 0:
          pass
-     end = time.time()
+      end = time.time()
 
-     return (( end - start ) * self.speed_of_sound ) / 2                  
+      return (( end - start ) * self.speed_of_sound ) / 2                  
      
 
 # ===========================================================================
