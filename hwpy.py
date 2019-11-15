@@ -509,16 +509,18 @@ class i2c_hardware:
       """
       Create an interface to the hardware i2c.
       Recent Pi's use interface 1, which is the default.
-      For older Pi's, you might bhave to specify interface 0."""
+      For older Pi's, if you get the error 
+      'IOError: [Errno 2] No such file or directory'
+      try with interface=0."""
 
       import smbus
-      bus = smbus.SMBus( interface )
+      self.bus = smbus.SMBus( interface )
 
-   def write( address, bytes ):
-      bus.write_i2c_block_data( address, bytes[ 0 ], bytes[ 1: ] )
+   def write( self, address, bytes ):
+      self.bus.write_i2c_block_data( address, bytes[ 0 ], bytes[ 1: ] )
 
-   def read( address, n ):
-      bus.bus.read_i2c_block_data( address, n ) 
+   def read( self, address, n ):
+      self.bus.bus.read_i2c_block_data( address, n ) 
         
         
 # ===========================================================================
