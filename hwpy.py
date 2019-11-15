@@ -414,7 +414,92 @@ def kitt( port, t = 0.5 ):
          time.sleep( 1.0 * t / port.n )
       for p in range( port.n - 1, 1, -1 ):
          port.write( 1 << p )
-         time.sleep( 1.0 * t / port.n )      
+         time.sleep( 1.0 * t / port.n )    
+         
+         
+# ===========================================================================
+#
+# sr04 ultra-sonic distance sensor
+#
+# ===========================================================================
+      
+class sr04:
+   """
+   The HC-SR04 is an ultrasonic distance sensor.
+   It runs at 5 Volt. The Pi runs at 3.3V.
+   The trigger output to the sr04 is no problem, the sr04 will
+   recognise the 3.3V from the Pi as a valid signal.
+   The 5V echo from the sr04 to the Pi must be reduced 
+   to 3.3V, for instance by a two-resistor (330 Ohm and 470 Ohm)
+   divider."""
+
+   def __init__( self, trigger, echo, temperature = 20 ):
+      """
+      Create an sr04 object from the trigger (output to sr04)
+      and echo (input from sr04, via resistors) pins.
+
+      The speed of sound is somewhat dependant on the temperature.
+      By default a temperature of 20 degrees is assumed, but you
+      can specify a different temperature."""
+
+      self.trigger = trigger
+      self.echo  = echo
+      self.speed_of_sound = 33100 + ( 0.6* temperature )
+      self.trigger.write( 0 ) 
+
+   def read( self ):
+      """
+      Measure and return the distance in cm.
+      When the sr04 is not connected properly or malfunctions
+      this call might block (never return). """
+
+      # 10 us pulse
+      self.trigger.write( 1 )
+      wait_us( 10 )
+      self.trigger.write( 0 )
+
+      # wait for start of the pulse
+      while self.echo.read() == 0:
+         pass
+      start = time.time()
+
+      # wait for end of the pulse
+      while self.echo.read() != 0:
+         pass
+     end = time.time()
+
+     return (( end - start ) * self.speed_of_sound ) / 2                  
+     
+
+# ===========================================================================
+#
+# hardware i2c
+#
+# ===========================================================================
+      
+class i2c_hardware:
+   """
+   This is the hardware i2c interface.
+   It is much faster than the bit banged (software) version, 
+   but it must be enabled, and it can only use the  
+   hardware i2c pins.
+   https://raspberry-projects.com/pi/pi-operating-systems/raspbian/io-pins-raspbian/i2c-pins
+   """
+
+   def __init__( self, interface = 1 ):
+      """
+      Create an interface to the hardware i2c.
+      Recent Pi's use interface 1, which is the default.
+      For older Pi's, you might bhave to specify interface 0."""
+
+      import smbus
+      bus = smbus.SMBus( interface )
+
+   def write( address, bytes ):
+      bus.write_i2c_block_data( address, bytes[ 0 ], bytes[ 1: ] )
+
+   def read( address, n ):
+      bus.bus.read_i2c_block_data( address, n ) 
         
         
 # ===========================================================================
@@ -784,5 +869,6 @@ class hd44780:
 # card reader
 # HC595?
 # servo
+# https://bitbucket.org/MattHawkinsUK/rpispy-misc/src/master/
          
       
