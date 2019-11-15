@@ -14,5 +14,7 @@ while True:
    print( 
       "%d C " % (
       chip.temperature()
-   )      
+   ))      
+   print( "A", chip.registers.read_byte( chip.TEMP_OUT0 ) )
+   print( "B", chip.registers.read_byte( chip.TEMP_OUT0 + 1 ) )
    time.sleep( 0.2 )

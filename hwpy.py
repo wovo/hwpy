@@ -682,7 +682,7 @@ class i2c_registers:
    def read_word( self, register ):
       self.i2c.write( self.address, [ register ] )
       result = self.i2c.read( self.address, 2 )
-      return ( result[ 0 ] << 8 n ) + result[ 1 ]
+      return ( result[ 0 ] << 8 ) + result[ 1 ]
    
 
 # ===========================================================================
@@ -718,8 +718,8 @@ class _pcf8574x:
       self.n = 8
       for i in range( 0, 8 ):
          self.pins.append( _buffered_pin( self, 1 << i ))
-      self.p0, self.p1, self.p2, self.p3, self.p4, self.p5, self.p6, self.p7 =
-         self.pins[ 0 ]         
+      self.p0, self.p1, self.p2, self.p3, 
+      self.p4, self.p5, self.p6, self.p7 = self.pins[ 0 ]         
       
    def flush( self ):
       self.i2c.write( self.address, [ self.write_buffer ] )   
@@ -752,19 +752,18 @@ class mpu6050:
    """
    This is a simple interface to the mpu6050 accelerometer."""
    
-    # registers 
-    PWR_MGMT_1  = 0x6B 
-    PWR_MGMT_2  = 0x6C 
-    ACCEL_XOUT0 = 0x3B 
-    ACCEL_YOUT0 = 0x3D 
-    ACCEL_ZOUT0 = 0x3F 
-    TEMP_OUT0   = 0x41 
-    GYRO_XOUT0  = 0x43 
-    GYRO_YOUT0  = 0x45 
-    GYRO_ZOUT0  = 0x47 
-
-    ACCEL_CONFIG = 0x1C 
-    GYRO_CONFIG = 0x1B 
+   # registers 
+   PWR_MGMT_1   = 0x6B 
+   PWR_MGMT_2   = 0x6C 
+   ACCEL_XOUT0  = 0x3B 
+   ACCEL_YOUT0  = 0x3D 
+   ACCEL_ZOUT0  = 0x3F 
+   TEMP_OUT0    = 0x41 
+   GYRO_XOUT0   = 0x43 
+   GYRO_YOUT0   = 0x45 
+   GYRO_ZOUT0   = 0x47 
+   ACCEL_CONFIG = 0x1C 
+   GYRO_CONFIG  = 0x1B 
 
    def __init__( self, i2c, address = 0x68 ):
       self.registers = i2c_registers( i2c, address )
@@ -790,7 +789,7 @@ class mpu6050:
    
    def acceleration( self ):
       """
-      Read and return the acceleraction readuings"""
+      Read and return the acceleraction readings"""
       
       return xyz(
          self.registers.read_word( ACCEL_XOUT0 ),
