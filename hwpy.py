@@ -1,6 +1,8 @@
 # ===========================================================================
 #
-# hwpy: an OO hardware interface library for the Raspberry Pi
+# hwpy: an OO hardware interface library 
+# - for the Raspberry Pi
+# - for running native, connected to a GPIO server
 #
 # home: https://www.github.com/wovo/hwpy
 #
@@ -810,7 +812,9 @@ class servo:
    One thread is created per servo.
    The common hobby servo's must be powered with 5V.
    One small (9G) servo can probably be powered directly from the Pi's 5V,
-   for more or larger servo's you should use a separate 5V power."""
+   for more or larger servo's you should use a separate 5V power.
+   The PWM pulse to the servo should be 5V, but in practice the
+   3.3V pulse from a Pi GPIO seems tgo work fine."""
 
    def __init__( self, pin, min = 1000, max = 2000 ):
       """
