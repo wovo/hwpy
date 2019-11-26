@@ -31,7 +31,7 @@
 #
 # ===========================================================================
 
-import time, thread
+import time, threading
 
    
 # ===========================================================================
@@ -194,7 +194,7 @@ class _rapi_gpio:
    """A Raspberry Pi gpio (input and output) pin.
    """
 
-   import RPi, RPi.GPIO  
+#   import RPi, RPi.GPIO
 
    def __init__( self, pin ):
       """Create a gpio pin from its pin (BCM) number.
@@ -241,14 +241,116 @@ class _rapi_gpio:
       
 # ===========================================================================
 #
-# gpio, gpi, gpo, gpoc
+# Host-server implementation of a gpio
+#
+# ===========================================================================
+
+_serial_port = None
+_serial_port_name = "COM3"
+_serial_port_baudrate = 115200
+
+class _host_gpio:
+   """A remote GPIO pin.
+   
+   This is a GPIO pin that is provided by a GPIO server.
+   It is used via serial connection.
+   
+   To use this class, you must isntall PySerial:
+      python -m pip install pyserial
+   """
+   
+   cmd_input   = 0
+   cmd_output  = 1
+   cmd_high    = 2
+   cmd_low     = 3
+   cmd_read    = 4
+
+   def __init__( self, nr ):
+      self.pin = nr - 2 
+      
+      global _serial_port
+      if _serial_port == None:
+         import serial
+         _serial_port = serial.Serial( 
+            _serial_port_name, 
+            _serial_port_baudrate,
+            timeout = 1,
+            parity=serial.PARITY_NONE            
+         ) 
+         time.sleep( 1.0 )
+  
+   def _command( self, cmd, pin ):
+      d = chr( ( cmd << 5 ) + pin ).encode('utf-8')
+      if cmd == self.cmd_read:
+         _serial_port.read( timeout = 0 );
+         _serial_port.write( d )
+         return _serial_port.read( timeout = 1 );
+      else:
+         _serial_port.write( d )
+         b = _serial_port.read( size = 1000 )
+         print( b.decode( "utf-8", errors = "ignore" ) )
+      
+   def make_input( self ):
+      """Make the gpio an input, with pull-up
+      """
+      self._command( 
+         self.cmd_input, 
+         self.pin 
+      )
+      
+   def make_output( self ):
+      """Make the gpio an output
+      """
+      self._command( 
+        self.cmd_output, 
+        self.pin
+      )
+
+      
+   def write( self, v ):
+      """Write v (0 or 1) to the gpio. 
+      
+      Note: the gpio must be an output.
+      """
+      self._command( 
+         self.cmd_high if v else self.cmd_low, 
+         self.pin 
+      )
+
+      
+   def read( self ):
+      """Read the value (0 or 1) of the gpio. 
+      
+      Note: the gpio must be an input.
+      """
+      c = self._command( 
+        self.cmd_read, 
+        self.pin 
+      )
+      return False if c == '0' else True
+      
+      
+# ===========================================================================
+#
+# the actual gpio used by an application
 #
 # ===========================================================================
       
-      
 """Create a gpio pin.
 """
-gpio = _rapi_gpio
+import os
+
+if os.name == 'nt':
+   gpio = _host_gpio
+else:   
+   gpio = _rapi_gpio
+      
+      
+# ===========================================================================
+#
+# gpio, gpi, gpo, gpoc
+#
+# ===========================================================================    
       
 class gpi:
    """A gpi (input only) pin (with pull-up).
@@ -1089,7 +1191,7 @@ class servo:
       self._min = min
       self._max = max
       self._value = 0
-      thread.start_new_thread( lambda: self._thread(), () )
+      threading.start_new_thread( lambda: self._thread(), () )
       
    def write( self, value ):
       """Write a new setting to the servo.
