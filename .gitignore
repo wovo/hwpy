@@ -1,1 +1,9 @@
 *.pyc
+*.o
+*.ld
+*.elf
+*.map
+*.lst
+*.lss
+*.bin
+*.hex
