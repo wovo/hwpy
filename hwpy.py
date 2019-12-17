@@ -17,7 +17,6 @@
 # hd44780 direct demo
 # serial backpack HD44780
 # SPI
-# MPU6050
 # card reader
 # HC595?
 # https://bitbucket.org/MattHawkinsUK/rpispy-misc/src/master/

@@ -3,7 +3,8 @@ import hwpy
 from demo.rapi.neopixel_ring import neopixel_demo
 
 i2c_bus_lcd = hwpy.i2c_hardware()
-lcd = hwpy.i2c_lcd(i2c_bus_lcd)
+pcf = hwpy.pcf8574(i2c_bus_lcd, 0x07)
+lcd = hwpy.hd44780.from_pcf8574(pcf, hwpy.xy(16,2))
 
 left, last_left = hwpy.gpi(22, pulldown=True), False
 ok, last_ok = hwpy.gpi(27, pulldown=True), False
@@ -18,7 +19,7 @@ demos = [
 ]
 current_demo = 0
 
-lcd.lcd_display_string(demos[current_demo][0], 1)
+lcd.write("\f" + demos[current_demo][0])
 
 test = hwpy.xy(0,0)
 test2 = test / 4
@@ -31,13 +32,11 @@ while True:
 
     if left_val and not last_left:
         current_demo = (current_demo - 1) % len(demos)
-        lcd.lcd_clear()
-        lcd.lcd_display_string(demos[current_demo][0], 0)
+        lcd.write("\f" + demos[current_demo][0])
 
     if right_val and not last_right:
         current_demo = (current_demo + 1) % len(demos)
-        lcd.lcd_clear()
-        lcd.lcd_display_string(demos[current_demo][0], 0)
+        lcd.write("\f" + demos[current_demo][0])
 
     if ok_val and not last_ok:
         while ok.read():

@@ -1,13 +1,12 @@
 import hwpy, time
 
 
-def neopixel_demo(ring, abort_when=lambda: True):
+def neopixel_demo(ring, abort_when=lambda: False):
     for i in range(8):
         ring.set_pixel(i, (0, 0, 0))
 
     start = 0
     end = 2
-
     while not abort_when():
         ring.set_pixel(start, (0, 0, 0))
         ring.set_pixel(end, (10, 0, 0))
