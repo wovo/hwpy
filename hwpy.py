@@ -16,7 +16,6 @@
 # pcf8591 a/d
 # hd44780 direct demo
 # serial backpack HD44780
-# SPI
 # card reader
 # HC595?
 # https://bitbucket.org/MattHawkinsUK/rpispy-misc/src/master/
@@ -33,16 +32,18 @@ import neopixel as adafruit_neopixel
 import board
 import time
 from copy import copy
+
 import typing
 
 from bitstring import Bits
-
 
 # ===========================================================================
 #
 # delays
 #
 # ===========================================================================
+from enum import Enum
+
 
 def wait_s(n):
     """Wait for n seconds.
@@ -675,7 +676,7 @@ def blink(pin: gpo, t: float = 0.5):
         time.sleep(1.0 * t / 2)
 
 
-def kitt(kitt_port: port, t=0.5):
+def kitt(kitt_port, t=0.5):
     """Kitt display on the pins in the port.
 
     t is the sweep time.
@@ -1195,7 +1196,7 @@ class mpu6050:
     def temperature(self) -> float:
         """Read and return the temperature, in degrees Celcius.
         """
-        raw_temp = self.registers.read_word(self.TEMP_OUT0)
+        raw_temp = Bits(uint=self.registers.read_word(self.TEMP_OUT0), length=16).int
         actual_temp = (raw_temp / 340.0) + 36.53
         return actual_temp
 
@@ -1211,9 +1212,9 @@ class mpu6050:
         """Read and return the acceleration readings.
         """
         return xyz(
-            Bits(uint=self.registers.read_word(self.ACCEL_XOUT0), length=16).int / 16384,
-            Bits(uint=self.registers.read_word(self.ACCEL_YOUT0), length=16).int / 16384,
-            Bits(uint=self.registers.read_word(self.ACCEL_ZOUT0), length=16).int / 16384)
+            Bits(uint=self.registers.read_word(self.ACCEL_XOUT0), length=16).int / 16384.0,
+            Bits(uint=self.registers.read_word(self.ACCEL_YOUT0), length=16).int / 16384.0,
+            Bits(uint=self.registers.read_word(self.ACCEL_ZOUT0), length=16).int / 16384.0)
 
 
 # ===========================================================================
@@ -1477,7 +1478,7 @@ class neopixel:
             diff.append((end[i] - start[i]) / size)
 
         current_color = list(start)
-        for i in range(start_pixel, end_pixel+1):
+        for i in range(start_pixel, end_pixel + 1):
             self.set_pixel(i, tuple(int(comp) for comp in current_color))
             for i in range(3):
                 current_color[i] += diff[i]
@@ -1485,3 +1486,53 @@ class neopixel:
 
     def __del__(self):
         self.pixels.deinit()
+
+
+class _rapi_spi_hardware:
+    class SPEED(Enum):
+        M125 = 125000000
+        M62_5 = 62500000
+        M32_2 = 31200000
+        M15_6 = 15600000
+        M7_8 = 7800000
+        M3_9 = 3900000
+        K1953 = 1953000
+        K976 = 976000
+        K488 = 488000
+        K244 = 244000
+        K122 = 122000
+        K61 = 61000
+        K30_5 = 30500
+        K15_2 = 15200
+        K7_629 = 7629
+
+    def __init__(self, bus: int, device: int, clock_polarity: bool = False, clock_phase: bool = False,
+                 speed: SPEED = SPEED.K976):
+        """
+        Create a hardware SPI interface.
+        The speed is set to 1M by default so the bus is easily debuggable with a simple logic analyzer
+        See https://en.wikipedia.org/wiki/Serial_Peripheral_Interface#Clock_polarity_and_phase for information about clock phase and polarity
+        On a raspberry pi, bus should be 0 most of the time,
+        Device can either be 0 or 1, depending on the chip select line you are using
+        """
+        import spidev
+        self.bus = spidev.SpiDev()
+        self.bus.open(bus, device)
+        self.bus.mode = (clock_polarity << 1) | clock_phase
+        self.bus.max_speed_hz = speed.value
+
+    def write_read(self, data_bytes, cs_pin: gpo = None):
+        """
+        Write and read on the SPI bus
+
+        When passing a cs_pin, the given pin will be used instead of the raspberry Pi's CS0 or CS1,
+        Use this if CS0 and CS1 are unavailable for your design
+        """
+        if cs_pin is not None:
+            self.bus.no_cs = True
+            cs_pin.write(self.bus.mode & 1)
+        data = self.bus.xfer3(data_bytes)
+        if cs_pin is not None:
+            self.bus.no_cs = False
+            cs_pin.write((~self.bus.mode) & 1)
+        return data
