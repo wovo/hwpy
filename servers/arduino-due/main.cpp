@@ -1,70 +1,11 @@
 // ==========================================================================
 //
-// remote GPIO server
-//
-// This application implements a GPIO server that can be used to control
-// its GPIO pins over a serial line nusing a simple but fast protocol.
-//
-// The main purpose is to test Python code that manipulates GPIO pins
-// without having to run the Python code on an embedded system.
-// Additionally, it is easier to swap one Arduino due with peripheral
-// hardware for anotrher one, than swapping the  peripherals connected
-// to a Raspberry Pi.
-//   
-// Protocol:
-// - 115k2 baud
-// - one-byte commands to this server
-// - high 3 bits == command, as per enum class command
-// - low 5 bits == pin, as per pin_table
-// - digital read sends back '0' or '1'
-// - other commands are silent
-//
-// Notes:
-// - only 32 pins can be used this way
-// - only GPIO supported
-// - the server doesn't do any checking
+// Arduino Due remote GPIO server
 //
 // ==========================================================================
 
 #include "hwlib.hpp"
-
-enum class command { 
-   input   = 0, 
-   output  = 1, 
-   high    = 2, 
-   low     = 3, 
-   read    = 4 
-};   
-
-void do_command( hwlib::pin_in_out & pin, command cmd ){
-
-   if ( cmd == command::input ){
-HWLIB_TRACE;
-//      pin.direction_set_input();
-      pin.direction_flush();
-	  
-   } else if ( cmd == command::output ){
-HWLIB_TRACE;
-      pin.direction_set_output();
-      pin.direction_flush();
-
-   } else if( cmd  == command::high ){
-HWLIB_TRACE;
-      pin.write( 1 );
-	  pin.flush();
-
-   } else if( cmd  == command::low ){
-HWLIB_TRACE;
-      pin.write( 0 );
-      pin.flush();
-	  
-   } else if( cmd  == command::read ){
-HWLIB_TRACE;
-	 pin.refresh();
-     hwlib::cout << ( pin.read() ? '1' : '0' );
-	  
-   }	  	
-}
+#include "../commands.hpp"
 
 int main(){
 
@@ -105,39 +46,17 @@ int main(){
       &p00, &p01, &p02, &p03, &p04, &p05, &p06, &p07, &p08, &p09,
       &p10, &p11, &p12, &p13, &p14, &p15, &p16, &p17, &p18, &p19,
       &p20, &p21, &p22, &p23, &p24, &p25, &p26, &p27, &p28, &p29,
-	  &p30, &p31
+      &p30, &p31
    };
    
    hwlib::wait_ms( 10 );
-   
-if(0){
-   auto & pin = p11;
-   do_command( pin, command::input );
-   do_command( pin, command::output );
-   for(;;){
-      do_command( pin, command::high );
-      hwlib::wait_ms( 500 );	  
-      do_command( pin, command::low );
-      hwlib::wait_ms( 500 );	  
-   }
-}
 
-      //do_command( p11, command::output );	  
-HWLIB_TRACE;
-
-   for(;;){
-HWLIB_TRACE;	   
-      char c = hwlib::cin.getc();
-HWLIB_TRACE;	  
+   for(;;){	   
+      char c = hwlib::cin.getc();	  
       int pin_nr = c & 0x1F;
-      auto & pin = p11;
-	  (void)pin_table[ pin_nr ];
+      auto & pin = * pin_table[ pin_nr ];
       command cmd = (command) (( c >> 5 ) & 0x7 );
-	  
-	  hwlib::cout << "p=" << pin_nr << " c=" << int(cmd) << "\n";
-//      do_command( pin, command::output );	  
+	  //hwlib::cout << "p=" << pin_nr << " c=" << int(cmd) << "\n";
 	  do_command( pin, cmd );
-
-  
    }   
 }   

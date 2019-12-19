@@ -2,14 +2,17 @@
 #
 # hwpy: an OO hardware interface library 
 # - for the Raspberry Pi
-# - for running native, connected to a GPIO server
+# - for Windows, connected to a GPIO server (Arduino Uno or Due)
 #
 # home: https://www.github.com/wovo/hwpy
 #
 # author: Wouter van Ooijen (wouter.vanooijen@hu.nl)
 #
-# uses http://domoticx.com/python-library-rpi-gpio/
-# (which is pre-installed on the common RaPi Linux distributions)
+# For the Pi http://domoticx.com/python-library-rpi-gpio/ is used
+# (which is pre-installed on the common RaPi Linux distributions).
+# 
+# For use with a server PySerial must be installed:
+#      python -m pip install pyserial
 #
 # ToDo list
 #      
@@ -28,6 +31,7 @@
 # generate documentation (interactive, web)
 # Some tests (xy, xyz, maybe mocked gpio?)
 # targets: remote; micro-python on due, esp8266 -> development cycle??
+# inverting a port doesn't work, ~0 -> -1
 #
 # ===========================================================================
 
@@ -225,18 +229,18 @@ class _rapi_gpio:
          RPi.GPIO.OUT ) 
       
    def write( self, v ):
-      """Write v (0 or 1) to the gpio.
+      """Write v (evaluated as boolean) to the gpio.
       
       Note: the pin must be an output.
       """
-      RPi.GPIO.output( self._pin, v & 0x01 )   
+      RPi.GPIO.output( self._pin, 1 if v else 0 )   
       
    def read( self ):
-      """Read the value (0 or 1) of the gpio. 
+      """Read and retuirn the value (boolean) of the gpio. 
       
       Note: the pin must be an input.
       """
-      return RPi.GPIO.input( self._pin )
+      return True if RPi.GPIO.input( self._pin ) else False
       
       
 # ===========================================================================
@@ -244,6 +248,52 @@ class _rapi_gpio:
 # Host-server implementation of a gpio
 #
 # ===========================================================================
+
+# arduino pin designations
+
+d0  =  0
+d1  =  1
+d2  =  2
+d3  =  3
+d4  =  4 
+d5  =  5
+d6  =  6
+d7  =  7
+d8  =  8
+d9  =  9
+d10 = 10
+d11 = 11
+d12 = 12
+d13 = 13
+d14 = 14
+d15 = 15
+d16 = 16
+d17 = 17
+d18 = 18
+d19 = 19
+d20 = 20
+d21 = 21
+d22 = 22
+d23 = 23
+d24 = 24
+d25 = 25
+d26 = 26
+d27 = 27
+d28 = 28
+d29 = 29
+d30 = 30
+d31 = 31
+d32 = 32
+d33 = 33
+
+a0 = 14
+a1 = 15
+a2 = 16
+a3 = 17
+a4 = 18
+a5 = 19
+a6 = 20
+a7 = 21
 
 _serial_port = None
 _serial_port_name = "COM3"
@@ -254,9 +304,6 @@ class _host_gpio:
    
    This is a GPIO pin that is provided by a GPIO server.
    It is used via serial connection.
-   
-   To use this class, you must isntall PySerial:
-      python -m pip install pyserial
    """
    
    cmd_input   = 0
@@ -265,7 +312,25 @@ class _host_gpio:
    cmd_low     = 3
    cmd_read    = 4
 
+   def _empty_serial_input( self ):
+      while True:
+         d = _serial_port.read()
+         if d == b'':
+            return
+         if 0: #debug
+            print( "emptying ", d )
+         time.sleep( 0.001 )
+         
+   def _read_byte( self ):
+      while True:
+         d = _serial_port.read()
+         if d != b'':
+            if 0: #debug
+               print( "response ", d )
+            return d      
+
    def __init__( self, nr ):
+      # d0 and d1 are claimed for the communication
       self.pin = nr - 2 
       
       global _serial_port
@@ -274,21 +339,26 @@ class _host_gpio:
          _serial_port = serial.Serial( 
             _serial_port_name, 
             _serial_port_baudrate,
-            timeout = 1,
+            timeout = 0,
             parity=serial.PARITY_NONE            
          ) 
-         time.sleep( 1.0 )
+         
+         # opnening the port can cause the server to be reset, so
+         # wait for the server to come to life
+         time.sleep( 2.0 )
+         
+         # read and discard any junk that might be in the input
+         self._empty_serial_input()
   
    def _command( self, cmd, pin ):
-      d = chr( ( cmd << 5 ) + pin ).encode('utf-8')
+      d = chr( ( cmd << 5 ) + pin ).encode( 'utf-8' )
       if cmd == self.cmd_read:
-         _serial_port.read( timeout = 0 );
+         self._empty_serial_input()
          _serial_port.write( d )
-         return _serial_port.read( timeout = 1 );
+         d = self._read_byte()
+         return d.decode( 'utf-8' )
       else:
          _serial_port.write( d )
-         b = _serial_port.read( size = 1000 )
-         print( b.decode( "utf-8", errors = "ignore" ) )
       
    def make_input( self ):
       """Make the gpio an input, with pull-up
@@ -308,7 +378,7 @@ class _host_gpio:
 
       
    def write( self, v ):
-      """Write v (0 or 1) to the gpio. 
+      """Write v (evaluated as boolean) to the gpio. 
       
       Note: the gpio must be an output.
       """
@@ -319,7 +389,7 @@ class _host_gpio:
 
       
    def read( self ):
-      """Read the value (0 or 1) of the gpio. 
+      """Read the value (boolean) of the gpio. 
       
       Note: the gpio must be an input.
       """
@@ -393,7 +463,7 @@ class gpoc:
       self._pin.make_input()
       
    def write( self, v ):
-      """Write v (0 or 1) to the gpio.
+      """Write v (boolean value) to the gpio.
       """
       if v:
          self._pin.make_input()      
@@ -402,7 +472,7 @@ class gpoc:
          self._pin.write( 0 )    
 
    def read( self ):
-      """Read the value (0 or 1) of the gpio.
+      """Read the value (boolean value) of the gpio.
       """
       return self._pin.read()
 
@@ -452,7 +522,7 @@ class port:
       """      
       mask = 1
       for pin in self.pins:
-         pin.write( v & mask )
+         pin.write( ( v & mask ) != 0 )
          mask = mask << 1
          
    def make_input( self ):
@@ -501,14 +571,26 @@ class invert:
       
       Note: the minion must support write().
       """
-      self._minion.write( ~ v )
+      try:
+         x = self._minion.n
+         # port: write bitwise inverse
+         self._minion.write( ~ v )
+      except:
+         # single pin: write logic inverse      
+         self._minion.write( not v )
  
    def read( self ):
       """Return the inverse of the value read from the minion.
       
       Note: the minion must support read().
       """
-      return ~ self._minion.read()
+      try:
+         x = self._minion.n
+         # port: return bitwise inverse
+         return ~ self._minion.read()
+      except:
+         # single pin: return logic inverse
+         return not self._minion.read()
       
    def make_input():
       """Make the minion an input.
@@ -556,8 +638,8 @@ class all:
 # ===========================================================================
 
 class keypad:
+   """Interface for a matrix keypad.
    """
-   Interface for a matrix keypad."""
 
    def __init__( self, rows, columns, characters ):
       """Create a matrix keypad interface.
@@ -567,11 +649,11 @@ class keypad:
       The characters list is by row.
       The length of the list must be the number of rows multiplied
       by the number of columns.
-      The rows must be inputs or open-collector, 
-      the columns must be outputs or open-collector.
+      The rows must support write (msut be outputs or open-collector), 
+      the columns must support read (muist be inputs or open-collector).
       """
-      self._rows = rows
-      self._columns = columns
+      self._rows = invert( rows )
+      self._columns = invert( columns )
       self._characters = characters
       self._last = None
       
@@ -582,7 +664,7 @@ class keypad:
          pass      
       
       if ( self._rows.n * self._columns.n ) != len( self._characters ):
-         raise( "keypad error %n rows %n columns %n characters" %
+         raise Exception( "keypad error %d rows %d columns %d characters" %
             ( self._rows.n, self._columns.n, len( self._characters )))
    
    def is_pressed( self, key ):
@@ -591,8 +673,17 @@ class keypad:
       Return true if and only if the specified key is pressed.
       """
       i = self._characters.find( key )
-      self._columns.write( ~ ( 1 << ( i / self._rows.n )))
-      return ( self._rows.read() & ( 1 << i % self._rows.n )) == 0
+      w = 1 << ( i // self._columns.n )
+      self._rows.write( w )
+      r = self._columns.read() 
+      
+      m = ( 1 << i % self._rows.n )
+      x = ( self._columns.read() & ( 1 << i % self._rows.n )) != 0
+      print( key, i, w, r, m, x )
+      
+      i = self._characters.find( key )
+      self._rows.write( 1 << ( i // self._columns.n ))
+      return ( self._columns.read() & ( 1 << i % self._rows.n )) != 0
       
    def read_pressed_nonblocking( self, default ):
       """Return a pressed key (non-blocking).
@@ -602,6 +693,7 @@ class keypad:
       When none is found, return the default.
       """
       for c in self._characters:
+         print( c )
          if self.is_pressed( c ):
             return c
       return default            

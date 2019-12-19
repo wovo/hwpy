@@ -14,18 +14,18 @@
 SOURCES :=
 
 # header files in this project
-HEADERS :=
+HEADERS := ../commands.hpp
 
 # other places to look for files for this project
 SEARCH  := 
 
 # settings for Arduino Due projects
-TARGET            ?= arduino_due
-SERIAL_PORT       ?= COM3
-CONSOLE_BAUDRATE  ?= 115200
+TARGET            ?= arduino_uno
+SERIAL_PORT       ?= COM4
+CONSOLE_BAUDRATE  ?= 19200
 
 # include the hwlib makefile, which includes rtos and bmptk
-RELATIVE          ?= ./../..
+RELATIVE          ?= ./../../..
 TI-SOFTWARE       ?= $(RELATIVE)
 HWLIB             ?= $(TI-SOFTWARE)/hwlib
 BMPTK             ?= $(TI-SOFTWARE)/bmptk
