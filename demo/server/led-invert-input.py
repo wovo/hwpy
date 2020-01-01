@@ -9,7 +9,8 @@ import sys
 sys.path.append( "../.." )
 import hwpy
 
-led = hwpy.gpo( 13 )
-button = hwpy.invert( hwpy.gpi( 2 ))
+led = hwpy.gpo( hwpy.pins.d13 )
+button = hwpy.invert( hwpy.gpi( hwpy.pins.d2 ))
+
 while True:
    led.write( button.read() )

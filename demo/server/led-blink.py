@@ -6,5 +6,12 @@ import sys
 sys.path.append( "../.." )
 import hwpy
 
-led = hwpy.gpo( 13 )
-hwpy.blink( led )
+import time
+
+led = hwpy.gpo( hwpy.pins.d13 )
+print( "blink LED in while loop" )
+while True:
+   led.write( 0 )
+   time.sleep( 0.2 )
+   led.write( 1 )
+   time.sleep( 0.2 )

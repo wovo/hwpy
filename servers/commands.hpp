@@ -24,14 +24,14 @@ void do_command( hwlib::pin_in_out & pin, command cmd ){
 
    } else if( cmd  == command::high ){
       pin.write( 1 );
-	  pin.flush();
+      pin.flush();
 
    } else if( cmd  == command::low ){
       pin.write( 0 );
       pin.flush();
 	  
    } else if( cmd  == command::read ){
-	 pin.refresh();
+     pin.refresh();
      hwlib::cout << ( pin.read() ? '1' : '0' );
 	  
    }	  	

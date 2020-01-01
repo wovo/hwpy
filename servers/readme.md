@@ -9,7 +9,7 @@ The python code runs on the (windows or linux) host, and
 communicates over a serial interface with the server.
 
 Additionally, it is easier to swap one Arduino dwith peripheral
-hardware for anotrher one, than swapping the peripherals connected
+hardware for another one, than swapping the peripherals connected
 to a Raspberry Pi.
   
 Protocol:
@@ -22,10 +22,11 @@ Protocol:
 
 Notes:
 - a maximum of 32 pins can be used this way
-- pin numbering for Arduino servers is the arduino dN numbering
+- pin numbering for Arduino servers is the Arduino dN numbering,
+   but better use the d2 .. constants
 - d0 & d1 can't be used (used by the serial communication), 
    pin value 0 => pin d2
-- only GPIO supported (no A/D), but the analog pins are available as d14...)
+- only GPIO supported (no A/D), but the analog pins are available 
 - the server doesn't do any checking
 
 You will need bmptk, hwlib, and an ARM GCC compiler to
@@ -38,4 +39,4 @@ seems to be the limit.
 
 A tricky point is that opening the serial port might reset the Arduino.
 To cope with this, there is a 2 second wait after opening
-the serial port (inside the python gpio class).
+the serial port (inside the python remote gpio class).

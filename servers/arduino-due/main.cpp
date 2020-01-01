@@ -33,14 +33,15 @@ int main(){
    auto p21 = hwlib::target::pin_in_out( hwlib::target::pins::d23 );
    auto p22 = hwlib::target::pin_in_out( hwlib::target::pins::d24 );
    auto p23 = hwlib::target::pin_in_out( hwlib::target::pins::d25 );
-   auto p24 = hwlib::target::pin_in_out( hwlib::target::pins::d26 );
-   auto p25 = hwlib::target::pin_in_out( hwlib::target::pins::d27 );
-   auto p26 = hwlib::target::pin_in_out( hwlib::target::pins::d28 );
-   auto p27 = hwlib::target::pin_in_out( hwlib::target::pins::d29 );
-   auto p28 = hwlib::target::pin_in_out( hwlib::target::pins::d30 );
-   auto p29 = hwlib::target::pin_in_out( hwlib::target::pins::d31 );
-   auto p30 = hwlib::target::pin_in_out( hwlib::target::pins::d32 );
-   auto p31 = hwlib::target::pin_in_out( hwlib::target::pins::d33 );
+   
+   auto p24 = hwlib::target::pin_in_out( hwlib::target::pins::a0 );
+   auto p25 = hwlib::target::pin_in_out( hwlib::target::pins::a1 );
+   auto p26 = hwlib::target::pin_in_out( hwlib::target::pins::a2 );
+   auto p27 = hwlib::target::pin_in_out( hwlib::target::pins::a3 );
+   auto p28 = hwlib::target::pin_in_out( hwlib::target::pins::a4 );
+   auto p29 = hwlib::target::pin_in_out( hwlib::target::pins::a5 );
+   auto p30 = hwlib::target::pin_in_out( hwlib::target::pins::a6 );
+   auto p31 = hwlib::target::pin_in_out( hwlib::target::pins::a7 );
 
    hwlib::pin_in_out * pin_table[ 32 ] = {
       &p00, &p01, &p02, &p03, &p04, &p05, &p06, &p07, &p08, &p09,
@@ -56,7 +57,7 @@ int main(){
       int pin_nr = c & 0x1F;
       auto & pin = * pin_table[ pin_nr ];
       command cmd = (command) (( c >> 5 ) & 0x7 );
-	  //hwlib::cout << "p=" << pin_nr << " c=" << int(cmd) << "\n";
-	  do_command( pin, cmd );
+     //hwlib::cout << "p=" << pin_nr << " c=" << int(cmd) << "\n";
+     do_command( pin, cmd );
    }   
 }   

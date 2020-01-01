@@ -6,23 +6,25 @@ import sys
 sys.path.append( "../.." )
 import hwpy
 
-out_pins = hwpy.port([
-   hwpy.gpoc( hwpy.a4 ), 
-   hwpy.gpoc( hwpy.a5 ), 
-   hwpy.gpoc( hwpy.a5 ), 
-   hwpy.gpoc( hwpy.a7 )
-])
+import time
+
 in_pins = hwpy.port([
-   hwpy.gpi( hwpy.a0 ), 
-   hwpy.gpi( hwpy.a1 ), 
-   hwpy.gpi( hwpy.a2 ), 
-   hwpy.gpi( hwpy.a3 )
+   hwpy.gpi( hwpy.pins.a0 ), 
+   hwpy.gpi( hwpy.pins.a1 ), 
+   hwpy.gpi( hwpy.pins.a2 ), 
+   hwpy.gpi( hwpy.pins.a3 )
 ])
-keypad = hwpy.keypad( out_pins, in_pins,  "D#0*C987B654A321" )
+out_pins = hwpy.port([
+   hwpy.gpoc( hwpy.pins.a4 ), 
+   hwpy.gpoc( hwpy.pins.a5 ), 
+   hwpy.gpoc( hwpy.pins.a6 ), 
+   hwpy.gpoc( hwpy.pins.a7 )
+])
+keypad = hwpy.keypad( out_pins, in_pins,  "147*2580369#ABCD" )
 
-p = hwpy.gpi( hwpy.d2 )
+print( "read keypad" )
+n = 0
 while True:
-   print( p.read() )
-
-while True:
-   print( "=======================", keypad.read() )
+   k = keypad.read()
+   n += 1
+   print( n, k )
