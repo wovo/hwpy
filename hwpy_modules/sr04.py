@@ -12,6 +12,8 @@
 #
 # ===========================================================================
 
+from hwpy_modules.wait import *
+
 class sr04:
     """SR04 ultrasonic distance sensor interface.
 

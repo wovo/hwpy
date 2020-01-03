@@ -41,7 +41,6 @@ import os
 #import neopixel as adafruit_neopixel
 #import board
 #from copy import copy
-#from bitstring import Bits
 #from enum import Enum
 
 from hwpy_modules.wait import *

@@ -5,7 +5,7 @@
 # home: https://www.github.com/wovo/hwpy
 #
 # ===========================================================================
-
+from hwpy_modules.gpio_buffered import _buffered_pin
 from hwpy_modules.i2c_implementation import *
 
 # ===========================================================================

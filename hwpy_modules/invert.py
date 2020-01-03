@@ -65,7 +65,7 @@ class invert:
          # single pin: return logic inverse
          return not self._minion.read()
       
-   def make_input():
+   def make_input(self):
       """Make the minion an input.
       
       Note: The minion must suppoirt make_input().
@@ -73,7 +73,7 @@ class invert:
 
       self._minion.make_input()
 
-   def make_output():
+   def make_output(self):
       """Make the minion an output.
       
       Note: The minion must support make_output().

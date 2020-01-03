@@ -5,9 +5,10 @@
 # home: https://www.github.com/wovo/hwpy
 #
 # ===========================================================================
-
+from hwpy_modules.i2c_registers import i2c_registers
 from hwpy_modules.xy import *
 from hwpy_modules.i2c_implementation import *
+from bitstring import Bits
 
 # ===========================================================================
 #

@@ -12,7 +12,7 @@ from hwpy_modules.xy import *
 from hwpy_modules.gpio import *
 from hwpy_modules.port import *
 from hwpy_modules.pcf8574 import *
-
+from hwpy_modules.wait import *
 
 # ===========================================================================
 #
