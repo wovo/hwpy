@@ -12,6 +12,10 @@
 #
 # ===========================================================================
 
+import neopixel as adafruit_neopixel
+import board
+from hwpy_modules.gpio import *
+import enum
 class neopixel:
     def __init__(self, pixel_count: int):
         self.pixel_count = pixel_count

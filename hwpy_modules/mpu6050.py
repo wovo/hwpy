@@ -6,8 +6,11 @@
 #
 # ===========================================================================
 
+from bitstring import Bits
 from hwpy_modules.xy import *
 from hwpy_modules.i2c_interface import *
+from hwpy_modules.i2c_registers import *
+
 
 # ===========================================================================
 #
