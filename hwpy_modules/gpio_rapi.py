@@ -1,16 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+Raspberry Pi gpio implementation
 
-# ===========================================================================
-#
-# Raspberry Pi gpio implementation
-#
-# ===========================================================================
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 class _rapi_gpio:
     """A Raspberry Pi gpio (input and output) pin.

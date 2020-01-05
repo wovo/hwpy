@@ -1,20 +1,12 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+Raspberry Pi hardware i2c
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.i2c_interface import *
-
-# ===========================================================================
-#
-# Raspberry Pi hardware i2c
-#
-# ===========================================================================
-from hwpy_modules.i2c_implementation import i2c_implementation
-
 
 class _rapi_i2c_hardware(i2c_interface):
     """Hardware i2c interface.

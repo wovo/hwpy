@@ -1,10 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+hd44780
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 import typing
 
@@ -13,12 +13,6 @@ from hwpy_modules.gpio import *
 from hwpy_modules.port import *
 from hwpy_modules.pcf8574 import *
 from hwpy_modules.wait import *
-
-# ===========================================================================
-#
-# hd44780
-#
-# ===========================================================================
 
 class hd44780:
     """4-bit interface to an HD44780 (character) LCD.

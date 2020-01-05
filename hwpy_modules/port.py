@@ -1,16 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+port
 
-# ===========================================================================
-#
-# port
-#
-# ===========================================================================
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 class port:
    """A port is a set of pins.

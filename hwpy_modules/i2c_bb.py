@@ -1,19 +1,13 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+bit-banged i2c
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.gpio import *
 from hwpy_modules.i2c_interface import *
-
-# ===========================================================================
-#
-# bit-banged i2c
-#
-# ===========================================================================
 
 class i2c_from_scl_sda( i2c_interface):
     """Software i2c interface.

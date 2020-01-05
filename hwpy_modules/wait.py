@@ -1,18 +1,12 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+delays
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 import time
-
-# ===========================================================================
-#
-# delays
-#
-# ===========================================================================
 
 def wait_s(n):
     """Wait for n seconds.

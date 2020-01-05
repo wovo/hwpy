@@ -1,20 +1,13 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+pcf8574(a)
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.i2c_interface import *
 from hwpy_modules.gpio_buffered import *
-
-
-# ===========================================================================
-#
-# pcf8574(a)
-#
-# ===========================================================================
 
 class _pcf8574x:
     """Interface to pcf8754(a) i2c I/O extenders.

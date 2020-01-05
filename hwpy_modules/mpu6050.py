@@ -1,22 +1,15 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+mpu6050
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from bitstring import Bits
 from hwpy_modules.xy import *
 from hwpy_modules.i2c_interface import *
 from hwpy_modules.i2c_registers import *
-
-
-# ===========================================================================
-#
-# mpu6050
-#
-# ===========================================================================
 
 class mpu6050:
     """A simple interface to the mpu6050 accelerometer.

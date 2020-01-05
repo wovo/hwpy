@@ -1,16 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+invert
 
-# ===========================================================================
-#
-# invert
-#
-# ===========================================================================
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 class invert:
    """Invert a pin or port.

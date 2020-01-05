@@ -1,10 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+gpio
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 import os
 
@@ -12,13 +12,6 @@ if os.name == 'nt':
     from hwpy_modules.gpio_remote import *
 else:
     from hwpy_modules.gpio_rapi import *
-    
-
-# ===========================================================================
-#
-# gpi, gpo, gpoc
-#
-# ===========================================================================
 
 class gpi:
     """A gpi (input only) pin (with pull-up).

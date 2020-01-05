@@ -1,16 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+i2c interface
 
-# ===========================================================================
-#
-# i2c interface
-#
-# ===========================================================================
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 class i2c_interface:
     """

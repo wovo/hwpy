@@ -1,16 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+sr04 ultra-sonic distance sensor
 
-# ===========================================================================
-#
-# sr04 ultra-sonic distance sensor
-#
-# ===========================================================================
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.wait import *
 

@@ -1,18 +1,12 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+i2c_registers
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.i2c_interface import *
-
-# ===========================================================================
-#
-# i2c_registers
-#
-# ===========================================================================
 
 class i2c_registers:
     """Access to registers in an i2c peripheral chip.

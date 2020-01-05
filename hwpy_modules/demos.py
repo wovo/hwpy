@@ -1,18 +1,12 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+simple pin and port demos
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.gpio import *
-
-# ===========================================================================
-#
-# simple pin and port demos
-#
-# ===========================================================================
 
 def blink( pin : gpo, t: float = 0.5 ):
     """Blink a LED on the pin.

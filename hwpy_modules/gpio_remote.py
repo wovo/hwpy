@@ -1,19 +1,12 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+Remote (host-server) implementation of a gpio pin
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 import time, enum
-
-
-# ===========================================================================
-#
-# Remote (host-server) implementation of a gpio pin
-#
-# ===========================================================================
 
 class pins( enum.Enum ):
    pass

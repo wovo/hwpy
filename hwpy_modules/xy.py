@@ -1,10 +1,10 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+xy and xyz classes
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.wait import *
 import copy
@@ -14,6 +14,7 @@ import copy
 # xy class
 #
 # ===========================================================================
+
 from copy import copy
 
 class xy:

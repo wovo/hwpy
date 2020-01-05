@@ -1,21 +1,16 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+neopixel (WS2812)
 
-# ===========================================================================
-#
-# neopixel (WS2812)
-#
-# ===========================================================================
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 import neopixel as adafruit_neopixel
 import board
 from hwpy_modules.gpio import *
 import enum
+
 class neopixel:
     def __init__(self, pixel_count: int):
         self.pixel_count = pixel_count

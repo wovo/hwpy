@@ -1,19 +1,13 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+servo
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.gpio import *
 from hwpy_modules.wait import *
-
-# ===========================================================================
-#
-# servo
-#
-# ===========================================================================
 
 class servo:
     """Interface to a (hobby) servo.

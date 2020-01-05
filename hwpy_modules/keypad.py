@@ -1,21 +1,14 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+matrix keypad
+
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+"""
 
 from hwpy_modules.gpio import *
 from hwpy_modules.port import *
 from hwpy_modules.invert import *
-
-
-# ===========================================================================
-#
-# matrix keypad
-#
-# ===========================================================================
 
 class keypad:
    """Interface for a matrix keypad.

@@ -1,16 +1,11 @@
-# ===========================================================================
-#
-# part of hwpy: an OO hardware interface library
-#
-# home: https://www.github.com/wovo/hwpy
-#
-# ===========================================================================
+"""
+all
 
-# ===========================================================================
-#
-# all
-#
-# ===========================================================================
+part of hwpy: an OO hardware interface library
+
+home: https://www.github.com/wovo/hwpy
+
+"""
 
 class all:
     """Write to all supplied pins
