@@ -1,6 +1,11 @@
-import hwpy
+"""
+This demo shows how to implement a scrolling line on an HD44780 LCD
+"""
 
-# This demo shows how to implement a scrolling line on an HD44780 LCD
+import sys
+sys.path.append( "../.." )
+import hwpy
+print( __doc__)
 
 
 # Initialize an i2c hardware bus (by default pins BCM2(SDA1) and BCM3(SCL1) are used
@@ -11,7 +16,6 @@ i2c = hwpy.i2c_hardware()
 
 # Initialize a PCF8574 (The address is usually 0x07)
 port = hwpy.pcf8574(i2c, 0x07)
-
 
 # Initialize an HD44780 from the PCF, 16X12 is the size of the LCD in characters
 lcd = hwpy.hd44780.from_pcf8574(port, hwpy.xy(16,2))

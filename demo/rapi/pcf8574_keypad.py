@@ -2,7 +2,10 @@
 Read a 4x4 matrix keypad connected to a pcf8574
 """
 
-import hwpy, time
+import sys
+sys.path.append( "../.." )
+import hwpy
+print( __doc__)
 
 sda = hwpy.gpoc( 2 ) 
 scl = hwpy.gpoc( 3 )

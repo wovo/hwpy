@@ -2,7 +2,11 @@
 Demo for a hobby servo
 """
 
-import time, hwpy
+import sys, time
+sys.path.append( "../.." )
+import hwpy
+print( __doc__)
+
 servo = hwpy.servo( hwpy.gpo( 18 ))
 
 print( __doc__ )

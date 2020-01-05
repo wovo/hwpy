@@ -1,8 +1,11 @@
 """
-An alternate (left 4 on, right 4 on) display.
+An alternate (left 4 on, right 4 on) LEDs
 """
 
+import sys
+sys.path.append( "../.." )
 import hwpy
+print( __doc__)
 
 leds = hwpy.all([ 
    hwpy.gpo( 17 ),

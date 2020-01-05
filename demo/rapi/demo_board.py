@@ -1,4 +1,11 @@
+"""
+Demo board demo
+"""
+
+import sys, time
+sys.path.append( "../.." )
 import hwpy
+print( __doc__)
 
 from demo.rapi.neopixel_ring import neopixel_demo
 

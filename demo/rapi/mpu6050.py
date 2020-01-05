@@ -1,9 +1,11 @@
 """
-Show the values resad from an mpu6050
+Show the values read from an mpu6050
 """
 
-import hwpy, time
-
+import sys, time
+sys.path.append( "../.." )
+import hwpy
+print( __doc__)
 
 def mpu6050_demo(mpu: hwpy.mpu6050, abort_when=lambda: False):
     while not abort_when():

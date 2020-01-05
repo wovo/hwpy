@@ -2,7 +2,10 @@
 Show the pcf8574 pins as inputs
 """
 
-import hwpy, time
+import sys, time
+sys.path.append( "../.." )
+import hwpy
+print( __doc__)
 
 sda = hwpy.gpoc( 2 ) 
 scl = hwpy.gpoc( 3 )

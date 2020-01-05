@@ -2,7 +2,10 @@
 A kitt display on 8 LEDs connected to indicated pins.
 """
 
+import sys
+sys.path.append( "../.." )
 import hwpy
+print( __doc__)
 
 leds = hwpy.port([ 
    hwpy.gpo( 17 ),

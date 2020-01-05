@@ -1,4 +1,11 @@
-import hwpy, time
+"""
+neopixel demo
+"""
+
+import sys,time
+sys.path.append( "../.." )
+import hwpy
+print( __doc__)
 
 
 def neopixel_demo(ring, abort_when=lambda: False):

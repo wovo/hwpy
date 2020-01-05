@@ -2,7 +2,11 @@
 Demo for the sr04 ultra-sonic distance sensor
 """
 
-import time, hwpy
+import sys, time
+sys.path.append( "../.." )
+import hwpy
+print( __doc__)
+
 sr04 = hwpy.sr04( hwpy.gpo( 19 ), hwpy.gpi( 26 ) )
 
 while True:

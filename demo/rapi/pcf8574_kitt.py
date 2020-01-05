@@ -2,7 +2,10 @@
 Blink on a single LED connected to a pcf8574
 """
 
+import sys
+sys.path.append( "../.." )
 import hwpy
+print( __doc__)
 
 sda = hwpy.gpoc( 2 ) 
 scl = hwpy.gpoc( 3 )
