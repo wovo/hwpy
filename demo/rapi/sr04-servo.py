@@ -15,5 +15,7 @@ while True:
    cm = sr04.read()
    if cm < 5: cm = 5
    if cm > 25: cm = 25
-   servo.write( 1000 + 1000 * ( cm - 5 ) / 25 )
-   time.sleep( 0.2 )
+   t = 1000 + 1000 * ( cm - 5 ) / 25
+   print( cm, t )
+   servo.write( t )
+   time.sleep( 0.5 )
