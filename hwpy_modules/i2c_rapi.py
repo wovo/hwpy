@@ -28,7 +28,15 @@ class _rapi_i2c_hardware(i2c_interface):
         try with interface=0.
         """
         import smbus
-        self._bus = smbus.SMBus(interface)
+        try:
+           self._bus = smbus.SMBus(interface)
+        except FileNotFoundError:
+             print(
+                "To use the hardware i2c, enable i2c in the kernel using "
+                "\"sudo raspi-config\"." )
+             print("Exiting...")
+             exit()
+              
 
     def write(self, address: int, data: list):
         """An i2c write transaction.

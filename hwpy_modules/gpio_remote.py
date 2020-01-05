@@ -97,7 +97,6 @@ class _server_gpio:
          try:
              import serial
          except ImportError:
-             serial = None
              print(
                 "To use Host GPIO, you need the pyserial module," 
                 "install it with \"python -m pip install pyserial\"." )

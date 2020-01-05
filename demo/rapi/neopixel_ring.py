@@ -1,5 +1,5 @@
 """
-neopixel demo
+neopixel ring demo
 """
 
 import sys,time

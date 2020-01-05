@@ -65,4 +65,5 @@ from hwpy_modules.hd44780 import *
 
 if os.name != 'nt':
    from hwpy_modules.i2c_rapi import *
-#   from hwpy_modules.neopixel_rapi import *
+   from hwpy_modules.spi_rapi import *
+   from hwpy_modules.neopixels_rapi import *
