@@ -53,13 +53,13 @@ class _rapi_gpio:
       
         Note: the pin must be an output.
         """
-        RPi.GPIO.output( self._pin, 1 if v else 0 )   
+        self.GPIO.output( self._pin, 1 if v else 0 )   
       
     def read( self ):
         """Read and retuirn the value (boolean) of the gpio. 
       
         Note: the pin must be an input.
         """
-        return True if RPi.GPIO.input( self._pin ) else False        
+        return True if self.GPIO.input( self._pin ) else False        
 
 gpio = _rapi_gpio
