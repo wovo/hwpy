@@ -44,11 +44,11 @@ def walk(p : port, t=0.5):
     The pins in the port must be outputs.
     """
     while True:
-        for i in range(0, p.n):
-            p.write( ( 1 << i + 1 ) - 1 )
+        for i in range(1, p.n + 1):
+            p.write( ( 1 << i ) - 1 )
             time.sleep(1.0 * t / p.n)
-        for i in range(p.n - 2, 0, -1):
-            p.write(( 1 << i + 1 ) - 1 )
+        for i in range(p.n - 1, 0, -1):
+            p.write(( 1 << i ) - 1 )
             time.sleep(1.0 * t / p.n)
             
             
