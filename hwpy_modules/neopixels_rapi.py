@@ -10,8 +10,16 @@ from hwpy_modules.gpio import *
 
 class neopixels:
     def __init__(self, pixel_count: int):
-        import neopixel as adafruit_neopixel
-        import board
+        try:
+           import neopixel as adafruit_neopixel
+           import board
+        except ModuleNotFoundError:
+             print(
+                "To use neopixels, you need the adafruit neopixel libary," 
+                "install it with \"sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel\"." )
+             print("Exiting...")
+             exit()
+        
         self.pixel_count = pixel_count
         self.pixels = adafruit_neopixel.NeoPixel(board.D18, pixel_count)
 
