@@ -6,6 +6,7 @@ part of hwpy: an OO hardware interface library
 home: https://www.github.com/wovo/hwpy
 """
 
+import enum
 from hwpy_modules.gpio import *
 
 class _rapi_spi_hardware:
