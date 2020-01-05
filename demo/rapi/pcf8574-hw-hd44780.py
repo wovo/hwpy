@@ -9,7 +9,7 @@ print( __doc__)
 
 
 i2c = hwpy.i2c_hardware()
-port = hwpy.pcf8574(i2c, 0x07)
+pcf = hwpy.pcf8574(i2c, 0x07)
 lcd = hwpy.hd44780.from_pcf8574(pcf, hwpy.xy(16,2))
 
 lcd.write( "\fHello world" )
