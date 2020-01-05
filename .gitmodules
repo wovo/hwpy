@@ -1,0 +1,3 @@
+[submodule "hwpy_extern/bitstring"]
+	path = hwpy_extern/bitstring
+	url = https://github.com/scott-griffiths/bitstring
