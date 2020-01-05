@@ -30,5 +30,5 @@ def neopixel_demo(ring, abort_when=lambda: False):
 
 
 if __name__ == '__main__':
-    ring = hwpy.neopixel(8)
+    ring = hwpy.neopixels(8)
     neopixel_demo(ring)
