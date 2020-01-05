@@ -5,6 +5,8 @@ This is a harware interface library for
 - for the Raspberry Pi
 - for Windows, connected to a GPIO server (Arduino Uno or Due)
 
+Python 3 is required.
+
 home: https://www.github.com/wovo/hwpy
 
 authors: 
@@ -57,7 +59,7 @@ from hwpy_modules.i2c_bb import *
 from hwpy_modules.i2c_registers import *
 from hwpy_modules.pcf8574 import *
 from hwpy_modules.pcf8591 import *
-from hwpy_modules.mpu6050 import *
+#from hwpy_modules.mpu6050 import *
 from hwpy_modules.servo import *
 from hwpy_modules.hd44780 import *
 

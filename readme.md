@@ -1,5 +1,6 @@
 This is an OO (Object Oriented) Python library 
 for interfacing the Raspberry Pi to external hardware.
+Python 3 is required.
 
 Don't be scared of OO: it makes your life much easier,
 and you are probably already using OO features without realizing this.

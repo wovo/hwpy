@@ -5,9 +5,9 @@ Demo for a hobby servo
 import sys, time
 sys.path.append( "../.." )
 import hwpy
-print( __doc__)
+print( __doc__ )
 
-servo = hwpy.servo( hwpy.gpo( 18 ))
+servo = hwpy.servo( hwpy.gpo( hwpy.arduino.d2 ))
 
 while True:
    for x in range( 0, 100, 5 ):

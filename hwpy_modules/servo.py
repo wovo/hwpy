@@ -8,6 +8,7 @@ home: https://www.github.com/wovo/hwpy
 
 from hwpy_modules.gpio import *
 from hwpy_modules.wait import *
+import _thread
 
 class servo:
     """Interface to a (hobby) servo.
@@ -19,7 +20,7 @@ class servo:
     One small (9G) servo can probably be powered directly from the Pi's 5V,
     for more or larger servo's you should use a separate 5V power.
     The PWM pulse to the servo should be 5V, but in practice the
-    3.3V pulse from a Pi GPIO seems tgo work fine.
+    3.3V pulse from a Pi GPIO seems to work fine.
 
     Servo connectors vary. This seems to be the most common one:
     image: images/servo-pinout.png
@@ -39,7 +40,7 @@ class servo:
         self._min = min
         self._max = max
         self._value = 0
-        # threading.start_new_thread(lambda: self._thread(), ()) TODO python3-ify this
+        _thread.start_new_thread(lambda: self._thread(), ())
 
     def write(self, value: int):
         """Write a new setting to the servo.
