@@ -7,6 +7,7 @@ home: https://www.github.com/wovo/hwpy
 """
 
 from hwpy_modules.i2c_interface import *
+import smbus
 
 class _rapi_i2c_hardware(i2c_interface):
     """Hardware i2c interface.

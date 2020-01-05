@@ -1,5 +1,5 @@
 """
-Walk on the LEDs connected to a pcf8574
+Walk on the LEDs connected to a pcf8574a using sw i2c
 """
 
 import sys

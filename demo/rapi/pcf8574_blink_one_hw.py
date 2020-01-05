@@ -10,4 +10,4 @@ print( __doc__)
 i2c = hwpy.i2c_hardware( 1 )
 chip = hwpy.pcf8574( i2c )
  
-hwpy.blink( chip.pins[ 0 ], 0.100 )
+hwpy.blink( chip.pins[ 0 ], 0.300 )
