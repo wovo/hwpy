@@ -30,11 +30,11 @@ def kitt(p : port, t=0.5):
     The pins in the port must be outputs.
     """
     while True:
-        for p in range(0, p.n):
-            p.write(1 << p)
+        for i in range(0, p.n):
+            p.write(1 << i)
             time.sleep(1.0 * t / p.n)
-        for p in range(p.n - 2, 0, -1):
-            p.write(1 << p)
+        for i in range(p.n - 2, 0, -1):
+            p.write(1 << i)
             time.sleep(1.0 * t / p.n)
             
 def walk(p : port, t=0.5):
@@ -44,11 +44,11 @@ def walk(p : port, t=0.5):
     The pins in the port must be outputs.
     """
     while True:
-        for p in range(0, p.n):
-            p.write( ( 1 << p + 1 ) - 1 )
+        for i in range(0, p.n):
+            p.write( ( 1 << i + 1 ) - 1 )
             time.sleep(1.0 * t / p.n)
-        for p in range(p.n - 2, 0, -1):
-            p.write(( 1 << p + 1 ) - 1 )
+        for i in range(p.n - 2, 0, -1):
+            p.write(( 1 << i + 1 ) - 1 )
             time.sleep(1.0 * t / p.n)
             
             
