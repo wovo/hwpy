@@ -8,6 +8,7 @@ home: https://www.github.com/wovo/hwpy
 
 import time
 from hwpy_modules.gpio import *
+from hwpy_modules.port import *
 
 def blink( pin : gpo, t: float = 0.5 ):
     """Blink a LED on the pin.

@@ -81,9 +81,9 @@ class xyz:
         """Create an xyz object from x, y and z values.
         """
 
-        self.x = copy(x)
-        self.y = copy(y)
-        self.z = copy(z)
+        self.x = copy.copy(x)
+        self.y = copy.copy(y)
+        self.z = copy.copy(z)
 
     def __eq__(self, other: 'xyz'):
         """Compare for equality
