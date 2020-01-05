@@ -15,6 +15,7 @@ authors:
 
 license:
    Boost license (see license_1_0.txt)
+   (external modules have their own license)
 
 For the Pi http://domoticx.com/python-library-rpi-gpio/ is used
 (which is pre-installed on the common RaPi Linux distributions).
@@ -35,15 +36,11 @@ ToDo & wish list
 - pullup/pulldown for server pins
 - a port and the pins of a pcf8574 should have the same interface
 - document pin and port interfaces, and ad
+- import board -> neopixel pins
+- color abstraction
 """
 
 import os
-
-#import time, typing, enum, sys
-#import neopixel as adafruit_neopixel
-#import board
-#from copy import copy
-#from enum import Enum
 
 from hwpy_modules.wait import *
 from hwpy_modules.xy import *
@@ -59,10 +56,11 @@ from hwpy_modules.i2c_bb import *
 from hwpy_modules.i2c_registers import *
 from hwpy_modules.pcf8574 import *
 from hwpy_modules.pcf8591 import *
-#from hwpy_modules.mpu6050 import *
+from hwpy_modules.mpu6050 import *
 from hwpy_modules.servo import *
 from hwpy_modules.hd44780 import *
 
+# rapi-only modules
 if os.name != 'nt':
    from hwpy_modules.i2c_rapi import *
    from hwpy_modules.spi_rapi import *

@@ -19,7 +19,8 @@ Features:
    - other interfaces: servo, matrix keypad
    
 license:
-   Boost license (see license_1_0.txt)
+   - hwpy: Boost license (see license_1_0.txt)
+   - Packages in the hwlib_extern directory have their own license
    
 usage examples:   
    check the files in the demo directory
