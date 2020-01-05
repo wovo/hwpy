@@ -15,8 +15,6 @@ import copy
 #
 # ===========================================================================
 
-from copy import copy
-
 class xy:
     """Transparent container for an (x,y) value pair.
     """

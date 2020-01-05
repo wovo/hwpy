@@ -15,8 +15,8 @@ class neopixels:
            import board
         except ModuleNotFoundError:
              print(
-                "To use neopixels, you need the adafruit neopixel libary," 
-                "install it with \"sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel\"." )
+                "To use neopixels, you need the adafruit neopixel libary, install it with \n"
+                "\"sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel\"." )
              print("Exiting...")
              exit()
         
