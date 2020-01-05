@@ -6,13 +6,15 @@
 #
 # ===========================================================================
 
+from hwpy_modules.i2c_interface import *
+
 # ===========================================================================
 #
 # Raspberry Pi hardware i2c
 #
 # ===========================================================================
 
-class _rapi_i2c_hardware(i2c_implementation):
+class _rapi_i2c_hardware(i2c_interface):
     """Hardware i2c interface.
 
     This is the hardware i2c interface.

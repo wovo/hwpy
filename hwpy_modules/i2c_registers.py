@@ -6,7 +6,7 @@
 #
 # ===========================================================================
 
-from hwpy_modules.i2c_implementation import *
+from hwpy_modules.i2c_interface import *
 
 # ===========================================================================
 #
@@ -24,7 +24,7 @@ class i2c_registers:
     Word (2 byte) values are assumed to be high-byte-first.
     """
 
-    def __init__(self, i2c: i2c_implementation, address: int):
+    def __init__(self, i2c: i2c_interface, address: int):
         """Create a register access object.
 
         A register access object is created from an i2c bus

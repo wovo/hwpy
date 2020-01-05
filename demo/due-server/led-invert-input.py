@@ -12,5 +12,6 @@ import hwpy
 led = hwpy.gpo( hwpy.pins.d13 )
 button = hwpy.invert( hwpy.gpi( hwpy.pins.d2 ))
 
+print( __doc__ )
 while True:
    led.write( button.read() )

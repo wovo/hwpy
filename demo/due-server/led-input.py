@@ -8,5 +8,6 @@ import hwpy
 
 led = hwpy.gpo( hwpy.d13 )
 button = hwpy.gpi( hwpy.d2 )
+print( __doc__ )
 while True:
    led.write( button.read() )

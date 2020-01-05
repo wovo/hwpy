@@ -13,5 +13,6 @@ keypad = hwpy.keypad(
    hwpy.port( [ chip.pins[ 4 ], chip.pins[ 5 ], chip.pins[ 6 ], chip.pins[ 7 ] ] ),
    "D#0*C987B654A321")
 
+print( __doc__ )
 while True:
    print( keypad.read() )

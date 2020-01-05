@@ -10,4 +10,5 @@ scl = hwpy.gpoc( 3 )
 i2c = hwpy.i2c_hardware( 1 )
 chip = hwpy.pcf8574( i2c )
  
+print( __doc__ ) 
 hwpy.kitt( hwpy.invert( chip ))

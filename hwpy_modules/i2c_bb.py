@@ -7,7 +7,7 @@
 # ===========================================================================
 
 from hwpy_modules.gpio import *
-from hwpy_modules.i2c_implementation import *
+from hwpy_modules.i2c_interface import *
 
 # ===========================================================================
 #
@@ -15,7 +15,7 @@ from hwpy_modules.i2c_implementation import *
 #
 # ===========================================================================
 
-class i2c_from_scl_sda( i2c_implementation):
+class i2c_from_scl_sda( i2c_interface):
     """Software i2c interface.
 
     This is a bit-banged i2c interface.
@@ -159,14 +159,14 @@ class i2c_from_scl_sda( i2c_implementation):
         return result
 
     def read_command(self, address: int, command: int, n: int) -> list:
-        """An i2c read transaction, with an 8 bit address
+        """An i2c read transaction, with an 8 bit register address
 
         Writes the command byte, then reads and returns the next n bytes from the i2c bus"""
         self.write(address, [command])
         return self.read(address, n)
 
     def write_command(self, address: int, command: int, data: list):
-        """An i2c write transaction, with an 8 bit address
+        """An i2c write transaction, with an 8 bit register address
 
         Writes the command byte, then the data bytes to the i2c bus
         """

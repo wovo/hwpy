@@ -6,7 +6,8 @@
 #
 # ===========================================================================
 
-from hwpy_modules.i2c_implementation import *
+from hwpy_modules.i2c_interface import *
+from hwpy_modules.gpio_buffered import *
 
 # ===========================================================================
 #
@@ -28,7 +29,7 @@ class _pcf8574x:
        - as a single named pin: chip.p2.write( 0 )
     """
 
-    def __init__(self, i2c: i2c_implementation, address: int):
+    def __init__(self, i2c: i2c_interface, address: int):
         """A pcf8574(a) interface from an i2c port and the slave address.
 
         Note: the address is the 7-bit i2c address.
@@ -40,7 +41,7 @@ class _pcf8574x:
         self._write_buffer = 0
         self.n = 8
         for i in range(0, 8):
-            self.pins.append(_buffered_pin(self, i))
+            self.pins.append(buffered_pin(self, i))
         self.p0, self.p1, self.p2, self.p3, self.p4, self.p5, self.p6, self.p7 = self.pins
 
     def _flush(self):
@@ -66,7 +67,7 @@ class _pcf8574x:
         return self._read_buffer
 
 
-def pcf8574(i2c: i2c_implementation, address: int = 0) -> _pcf8574x:
+def pcf8574(i2c: i2c_interface, address: int = 0) -> _pcf8574x:
     """pcf8574 I/O extender interface
 
     Create a pcf8574 interface from the i2c port and the
@@ -75,10 +76,10 @@ def pcf8574(i2c: i2c_implementation, address: int = 0) -> _pcf8574x:
     return _pcf8574x(i2c, 0x20 + address)
 
 
-def pcf8574a(i2c: i2c_implementation, address: int = 0) -> _pcf8574x:
+def pcf8574a(i2c: i2c_interface, address: int = 0) -> _pcf8574x:
     """pcf8574a I/O extender interface
 
     Create a pcf8574a interface from the i2c port and the
     (3-bit) address configured on the 3 address pins a0-a1-a2.
     """
-    return _pcf8574x(i2c, 0x28 + address)
+    return _pcf8574x(i2c, 0x38 + address)

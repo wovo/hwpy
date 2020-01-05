@@ -1,5 +1,5 @@
 """
-Blink a LED that is connected to pin d13 (the on-board LED).
+Blink a LED that is connected to pin p06 in a while loop
 """
 
 import sys
@@ -8,7 +8,7 @@ import hwpy
 
 import time
 
-led = hwpy.gpo( hwpy.pins.d13 )
+led = hwpy.gpo( hwpy.db103.p06 )
 print( "blink LED in while loop" )
 while True:
    led.write( 0 )

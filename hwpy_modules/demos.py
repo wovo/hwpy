@@ -37,6 +37,6 @@ def kitt(kitt_port, t=0.5):
         for p in range(0, kitt_port.n):
             kitt_port.write(1 << p)
             time.sleep(1.0 * t / kitt_port.n)
-        for p in range(kitt_port.n - 1, 1, -1):
+        for p in range(kitt_port.n - 2, 0, -1):
             kitt_port.write(1 << p)
             time.sleep(1.0 * t / kitt_port.n)

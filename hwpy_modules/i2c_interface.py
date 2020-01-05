@@ -12,10 +12,10 @@
 #
 # ===========================================================================
 
-class i2c_implementation:
+class i2c_interface:
     """
-    I2C implementation interface
-    Implementations for i2c buses should implement at least the following methods
+    I2C interface
+    Implementations should implement at least the methods defined here.
     """
 
     def read_command(self, address: int, command: int, n: int) -> list:

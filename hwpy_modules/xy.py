@@ -6,6 +6,9 @@
 #
 # ===========================================================================
 
+from hwpy_modules.wait import *
+import copy
+
 # ===========================================================================
 #
 # xy class
@@ -20,8 +23,8 @@ class xy:
         """Create an xy object from x and y values.
         """
 
-        self.x = copy(x)
-        self.y = copy(y)
+        self.x = copy.copy(x)
+        self.y = copy.copy(y)
 
     def __eq__(self, other: 'xy'):
         """Compare for equality

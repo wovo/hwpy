@@ -7,7 +7,7 @@
 # ===========================================================================
 
 from hwpy_modules.xy import *
-from hwpy_modules.i2c_implementation import *
+from hwpy_modules.i2c_interface import *
 
 # ===========================================================================
 #
@@ -32,7 +32,7 @@ class mpu6050:
     ACCEL_CONFIG = 0x1C
     GYRO_CONFIG = 0x1B
 
-    def __init__(self, i2c: i2c_implementation, address=0x68):
+    def __init__(self, i2c: i2c_interface, address=0x68):
         """Create an mpu6050 interface from an i2c bus and the chip address.
         """
         self.registers = i2c_registers(i2c, address)

@@ -1,5 +1,5 @@
 """
-Read a matrix keypad input.
+Read and print the 4 pins a0..a3
 """
 
 import sys
@@ -22,6 +22,7 @@ def bits( v, n ):
       v = v // 2
    return r   
 
+print( __doc__ )
 while True:
    print( bits( port.read(), port.n ))
    time.sleep( 0.5 )

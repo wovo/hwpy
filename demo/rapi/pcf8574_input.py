@@ -10,8 +10,8 @@ i2c = hwpy.i2c_from_scl_sda( scl, sda )
 chip = hwpy.pcf8574( i2c )
 chip.write( ~ 0 )
 
+print( __doc__ )
 while True:
-
    x = chip.read()
    y = x
    s = ""

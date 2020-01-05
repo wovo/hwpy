@@ -5,6 +5,7 @@ Demo for a hobby servo
 import time, hwpy
 servo = hwpy.servo( hwpy.gpo( 18 ))
 
+print( __doc__ )
 while True:
    for x in range( 0, 100, 5 ):
       servo.write( x / 100.0 )

@@ -22,7 +22,7 @@ out_pins = hwpy.port([
 ])
 keypad = hwpy.keypad( out_pins, in_pins,  "147*2580369#ABCD" )
 
-print( "read keypad" )
+print( __doc__ )
 n = 0
 while True:
    k = keypad.read()

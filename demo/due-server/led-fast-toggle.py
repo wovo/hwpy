@@ -8,6 +8,7 @@ sys.path.append( "../.." )
 import hwpy
 
 led = hwpy.gpo( hwpy.d13 )
+print( __doc__ )
 while True:
    led.write( 0 )
    led.write( 1 )

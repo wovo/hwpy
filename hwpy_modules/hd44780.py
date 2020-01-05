@@ -144,20 +144,20 @@ class hd44780:
         if self._goto_state == 0:
             pass
         elif self._goto_state == 1:
-            self._position.x = 10 * (char - '0')
+            self._position.x = 10 * ( ord( char ) - ord( '0' ) )
             self._goto_state += 1
             return
         elif self._goto_state == 2:
-            self._position.x += (char - '0')
+            self._position.x += ( ord( char ) - ord( '0' ) )
             self._goto_state += 1
             return
         elif self._goto_state == 3:
-            self._position.y = 10 * (char - '0')
+            self._position.y = 10 * ( ord( char ) - ord( '0' ) )
             self._goto_state += 1
             return
 
         elif self._goto_state == 4:
-            self._position.y += (char - '0')
+            self._position.y += ( ord( char ) - ord( '0' ) )
             self._goto_state = 0
             self.cursor(self._position)
             return

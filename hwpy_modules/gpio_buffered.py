@@ -12,12 +12,15 @@
 #
 # ===========================================================================
 
-class _buffered_pin:
+class buffered_pin:
     """A buffered GPIO pin.
 
     A buffered GPIO pin performs GPIO read operations via a read_buffer
     that can be refreshed, and write operations via a write_buffer
     that can be flushed.
+    
+    This is usefull when the GPIO pins are on an external chip like a
+    74HC594 or a PCF8574.
     """
 
     def __init__(self, master, nr: int):

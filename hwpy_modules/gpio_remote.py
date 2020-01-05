@@ -16,6 +16,9 @@ import time, enum
 # ===========================================================================
 
 class pins( enum.Enum ):
+   pass
+
+class arduino( pins ):
    """Arduino pin designations
    """
    d2  =  2
@@ -52,6 +55,20 @@ class pins( enum.Enum ):
    a6 = 32
    a7 = 33
    
+class db103( pins ):   
+   scl = 2
+   sda = 3
+   p06 = 4
+   p07 = 5
+   p10 = 6
+   p11 = 7
+   p12 = 8
+   p13 = 9
+   p14 = 10
+   p15 = 11
+   p18 = 12
+   p19 = 13
+   
 class _commands( enum.Enum ):   
    input   = 0
    output  = 1
@@ -61,6 +78,9 @@ class _commands( enum.Enum ):
 
 _serial_port = None
 _serial_port_name = "COM3"
+_serial_port_baudrate = 115200
+
+_serial_port_name = "COM4"
 _serial_port_baudrate = 115200
 
 class _server_gpio:
@@ -95,7 +115,8 @@ class _server_gpio:
                _serial_port_name, 
                _serial_port_baudrate,
                timeout = 0,
-               parity=serial.PARITY_NONE            
+               parity=serial.PARITY_NONE           
+                              
             ) 
          except serial.serialutil.SerialException:
              print(
@@ -105,7 +126,14 @@ class _server_gpio:
                 "An Arduino Due must be disconnected and re-connected "
                 "to effectuate a name change." % _serial_port_name )
              print("Exiting...")
-             exit()            
+             exit()        
+             
+         # reset-and-run sequence for a DB100/DB103 server    
+         _serial_port.setRTS( 0 ) # run mode
+         _serial_port.setDTR( 0 ) # reset
+         time.sleep( 0.1 )
+         _serial_port.setDTR( 0 ) # release reset
+         
          
          # openening the port can cause the server to be reset, so
          # wait for the server to come to life
@@ -188,6 +216,8 @@ class _server_gpio:
             _commands.read,
             self.pin
         )
+        if not c in [ b'0', b'1' ]:
+           print( "Invalid read response from server [%d]" % int( c ) )
         return False if c == b'0' else True
 
 gpio = _server_gpio
