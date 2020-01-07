@@ -19,6 +19,6 @@ def mpu6050_demo(mpu: hwpy.mpu6050, abort_when=lambda: False):
 
 
 if __name__ == '__main__':
-    i2c = hwpy.hwpy.i2c_hardware( 1 )
+    i2c = hwpyi2c_hardware( 1 )
     chip = hwpy.mpu6050(i2c)
     mpu6050_demo(chip)
