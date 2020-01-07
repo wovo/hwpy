@@ -11,14 +11,10 @@ def mpu6050_demo(mpu: hwpy.mpu6050, abort_when=lambda: False):
     while not abort_when():
         gyro = mpu.gyroscopes()
         accel = mpu.acceleration()
-        print("%10d %10d %10d %10d %10d %10d %10d" % (
+        print("%10d %s %s" % (
             mpu.temperature(),
-            gyro.x,
-            gyro.y,
-            gyro.z,
-            accel.x,
-            accel.y,
-            accel.z
+            str( gyro ),
+            str( accel )
         ))
 
 

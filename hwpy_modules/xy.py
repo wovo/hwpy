@@ -66,6 +66,11 @@ class xy:
         """
         return xy(self.x / other, self.y / other)
 
+    def __str__(self, f = "[%d,%d]"):
+        """Return the string representation
+        """
+        return f % ( self.x, self.y )
+
 
 # ===========================================================================
 #
@@ -130,3 +135,8 @@ class xyz:
         """Divide an xyz by a scalar
         """
         return xyz(self.x / other, self.y / other, self.z * other)
+
+    def __str__(self, f = "[%d,%d,%d]"):
+        """Return the string representation
+        """
+        return f % ( self.x, self.y, self.z )
