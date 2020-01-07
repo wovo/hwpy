@@ -45,9 +45,9 @@ class mpu6050:
         """Read and return the gyroscope readings.
         """
         return xyz(
-            Bits(uint=self.registers.read_word(self.GYRO_XOUT0), length=16).int / 131,
-            Bits(uint=self.registers.read_word(self.GYRO_YOUT0), length=16).int / 131,
-            Bits(uint=self.registers.read_word(self.GYRO_ZOUT0), length=16).int / 131)
+            bitstring.Bits(uint=self.registers.read_word(self.GYRO_XOUT0), length=16).int / 131,
+            bitstring.Bits(uint=self.registers.read_word(self.GYRO_YOUT0), length=16).int / 131,
+            bitstring.Bits(uint=self.registers.read_word(self.GYRO_ZOUT0), length=16).int / 131)
 
     def acceleration(self) -> xyz:
         """Read and return the acceleration readings.
