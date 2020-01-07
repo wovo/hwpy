@@ -6,7 +6,7 @@ part of hwpy: an OO hardware interface library
 home: https://www.github.com/wovo/hwpy
 """
 
-from hwpy_extern.bitstring import *
+from hwpy_extern.bitstring import Bits
 from hwpy_modules.xy import *
 from hwpy_modules.i2c_interface import *
 from hwpy_modules.i2c_registers import *
