@@ -16,6 +16,7 @@ def mpu6050_demo(mpu: hwpy.mpu6050, abort_when=lambda: False):
             str( gyro ),
             str( accel )
         ))
+        time.sleep( 0.5 )
 
 
 if __name__ == '__main__':
