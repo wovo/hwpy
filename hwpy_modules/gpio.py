@@ -10,8 +10,10 @@ import os
 
 if os.name == 'nt':
     from hwpy_modules.gpio_remote import *
+    print( "using remote gpio" )
 else:
     from hwpy_modules.gpio_rapi import *
+    print( "using local gpio" )
 
 class gpi:
     """A gpi (input only) pin (with pull-up).

@@ -8,8 +8,8 @@ sys.path.append( "../.." )
 import hwpy
 
 import time
-
-led = hwpy.gpo( hwpy.pins.d13 )
+print( hwpy.pins )
+led = hwpy.gpo( hwpy.arduino.d13 )
 print( __doc__ )
 while True:
    led.write( 0 )

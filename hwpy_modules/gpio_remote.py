@@ -73,8 +73,8 @@ _serial_port = None
 _serial_port_name = "COM3"
 _serial_port_baudrate = 115200
 
-_serial_port_name = "COM4"
-_serial_port_baudrate = 115200
+#_serial_port_name = "COM4"
+#_serial_port_baudrate = 115200
 
 class _server_gpio:
     """A remote GPIO pin on a server.

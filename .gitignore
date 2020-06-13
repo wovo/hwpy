@@ -9,3 +9,8 @@
 *.hex
 bmptk_fixed_size_stack.c
 __pycache__
+_run.bat
+_c_flags
+_cpp_flags
+_linker_flags
+_linker_libs
