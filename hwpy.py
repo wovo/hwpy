@@ -9,7 +9,7 @@ Python 3 is required.
 
 home: https://www.github.com/wovo/hwpy
 
-authors: 
+authors:
    - Wouter van Ooijen (wouter.vanooijen@hu.nl)
    - Niels Post (niels.post@student.hu.nl)
 
@@ -42,6 +42,9 @@ ToDo & wish list
 
 import os
 
+from extern/bitstring.bitstring import *
+from extern/adafruit/.platform import *
+
 from hwpy_modules.wait import *
 from hwpy_modules.xy import *
 from hwpy_modules.gpio import *
@@ -61,7 +64,8 @@ from hwpy_modules.servo import *
 from hwpy_modules.hd44780 import *
 
 # rapi-only modules
-if os.name != 'nt':
+if os.uname().machine != 'x86_64':
+   # not a very reliable test :(
    from hwpy_modules.i2c_rapi import *
    from hwpy_modules.spi_rapi import *
    from hwpy_modules.neopixels_rapi import *

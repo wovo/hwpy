@@ -5,8 +5,8 @@
 # (c) Wouter van Ooijen (wouter@voti.nl) 2017
 #
 # Distributed under the Boost Software License, Version 1.0.
-# (See accompanying file LICENSE_1_0.txt or copy at 
-# http://www.boost.org/LICENSE_1_0.txt) 
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
 #
 #============================================================================
 
@@ -17,11 +17,11 @@ SOURCES :=
 HEADERS := ../commands.hpp
 
 # other places to look for files for this project
-SEARCH  := 
+SEARCH  :=
 
 # settings for Arduino Due projects
 TARGET            ?= arduino_due
-SERIAL_PORT       ?= COM3
+#SERIAL_PORT       ?= COM3
 CONSOLE_BAUDRATE  ?= 115200
 
 # include the hwlib makefile, which includes rtos and bmptk
